@@ -40,9 +40,19 @@ class HomeScreen extends StatelessWidget {
                 itemCount: ticTacToe.boardState.length,
                 itemBuilder: (BuildContext ctx, int i) {
                   return ElevatedButton(
-                      onPressed: () {
-                        ticTacToe.setMove(i);
-                      },
+                      onPressed: ticTacToe.boardState[i] == TicTacToe.emptySpot
+                          ? () {
+                              ticTacToe.setMove(i);
+
+                              //check if is against cpu
+                              if (ticTacToe.isAgainstCPU &&
+                                  ticTacToe.boardState.any((position) =>
+                                      position == TicTacToe.emptySpot)) {
+                                int cpuLocation = ticTacToe.getComputerMove();
+                                ticTacToe.setMove(cpuLocation);
+                              }
+                            }
+                          : null,
                       child: Text('${ticTacToe.boardState[i]}'));
                 }),
 

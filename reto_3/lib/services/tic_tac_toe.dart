@@ -10,6 +10,7 @@ class TicTacToe with ChangeNotifier {
   static const player2 = 2;
 
   int currentTurn = player1;
+  bool isAgainstCPU = true;
 
   TicTacToe() {}
 
@@ -24,12 +25,15 @@ class TicTacToe with ChangeNotifier {
 
   // true if location is available, false otherwise
   void setMove(int location) {
-    if (boardState[location] == emptySpot) {
-      boardState[location] = currentTurn;
+    if (boardState.any((position) => position == emptySpot)) {
+      if (boardState[location] == emptySpot) {
+        boardState[location] = currentTurn;
 
-      //next turn
-      currentTurn = currentTurn == player1 ? player2 : player1;
-      notifyListeners();
+        // next turn
+        currentTurn = currentTurn == player1 ? player2 : player1;
+
+        notifyListeners();
+      }
     }
   }
 
