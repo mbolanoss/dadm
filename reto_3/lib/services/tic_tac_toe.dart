@@ -1,27 +1,35 @@
 import 'dart:math';
 
-class TicTacToe {
+import 'package:flutter/material.dart';
+
+class TicTacToe with ChangeNotifier {
   final boardState = List.filled(9, emptySpot);
 
   static const emptySpot = 0;
   static const player1 = 1;
   static const player2 = 2;
 
+  int currentTurn = player1;
+
   TicTacToe() {}
 
-  void clearBoard() {
+  void resetGame() {
     for (int i = 0; i < boardState.length; i++) {
       boardState[i] = emptySpot;
     }
+
+    currentTurn = player1;
+    notifyListeners();
   }
 
   // true if location is available, false otherwise
-  bool setMove(int player, int location) {
+  void setMove(int location) {
     if (boardState[location] == emptySpot) {
-      return false;
-    } else {
-      boardState[location] = player;
-      return true;
+      boardState[location] = currentTurn;
+
+      //next turn
+      currentTurn = currentTurn == player1 ? player2 : player1;
+      notifyListeners();
     }
   }
 

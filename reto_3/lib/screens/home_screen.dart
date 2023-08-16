@@ -1,48 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:reto_3/services/tic_tac_toe.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.title});
-
+class HomeScreen extends StatelessWidget {
   final String title;
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  HomeScreen({
+    super.key,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final ticTacToe = context.watch<TicTacToe>();
+
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+      body: SafeArea(
+        child: Center(
+            child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            // Title
             const Text(
-              'You have pushed the button this many times:',
+              'TicTacToe',
+              style: TextStyle(
+                fontSize: 38,
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+
+            // Board
+            GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                itemCount: ticTacToe.boardState.length,
+                itemBuilder: (BuildContext ctx, int i) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        ticTacToe.setMove(i);
+                      },
+                      child: Text('${ticTacToe.boardState[i]}'));
+                }),
+
+            // Reset btn
+            ElevatedButton(
+                onPressed: () => ticTacToe.resetGame(),
+                child: const Text('Reset'))
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        )),
       ),
     );
   }
