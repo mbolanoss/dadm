@@ -44,13 +44,17 @@ class HomeScreen extends StatelessWidget {
                           ? () {
                               ticTacToe.setMove(i);
 
+                              bool canMakeMove = ticTacToe.boardState.any(
+                                  (position) =>
+                                      position == TicTacToe.emptySpot);
+
                               //check if is against cpu
-                              if (ticTacToe.isAgainstCPU &&
-                                  ticTacToe.boardState.any((position) =>
-                                      position == TicTacToe.emptySpot)) {
+                              if (ticTacToe.isAgainstCPU && canMakeMove) {
                                 int cpuLocation = ticTacToe.getComputerMove();
                                 ticTacToe.setMove(cpuLocation);
                               }
+
+                              ticTacToe.checkWinner();
                             }
                           : null,
                       child: Text('${ticTacToe.boardState[i]}'));
@@ -59,7 +63,14 @@ class HomeScreen extends StatelessWidget {
             // Reset btn
             ElevatedButton(
                 onPressed: () => ticTacToe.resetGame(),
-                child: const Text('Reset'))
+                child: const Text('Reset')),
+
+            Text(
+              '${ticTacToe.winner}',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
           ],
         )),
       ),
