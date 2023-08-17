@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
             child: Padding(
           padding: EdgeInsets.fromLTRB(
             screenSize.width * 0.13,
-            screenSize.height * 0.07,
+            screenSize.height * 0.04,
             screenSize.width * 0.13,
             0,
           ),
@@ -46,64 +46,167 @@ class HomeScreen extends StatelessWidget {
                   itemBuilder: (BuildContext ctx, int i) {
                     return NumberBox(position: i);
                   }),
-              SizedBox(height: screenSize.height * 0.06),
-              // Turn text
-              Text(
-                ticTacToe.currentTurn == TicTacToe.player1
-                    ? 'Turno de: Jugador 1'
-                    : 'Turno de: Jugador 2',
-                style: const TextStyle(
-                  fontSize: 22,
-                  color: Colors.white,
-                ),
-              ),
+
+              SizedBox(height: screenSize.height * 0.04),
+
+              // Status text
+              const StatusText(),
 
               SizedBox(
                 height: screenSize.height * 0.02,
               ),
 
-              // Reset btn
-              SizedBox(
-                width: screenSize.width * 0.4,
-                child: ElevatedButton(
-                  onPressed: () => ticTacToe.resetGame(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 241, 197, 6),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                  ),
-                  child: const Text(
-                    'Reset',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+              // Buttons
+              GameButtons(),
 
-              // Winner text
-              Text(
-                ticTacToe.winner == 0
-                    ? ''
-                    : ticTacToe.winner == 1
-                        ? 'Ganador: Jugador 1'
-                        : ticTacToe.winner == 2
-                            ? 'Ganador: Jugador 2'
-                            : 'Empate',
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
+              SizedBox(height: screenSize.height * 0.05),
+              const Score(),
             ],
           ),
         )),
       ),
+    );
+  }
+}
+
+class GameButtons extends StatelessWidget {
+  const GameButtons({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ticTacToe = context.watch<TicTacToe>();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        // Reset
+        ElevatedButton(
+          onPressed: () => {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 241, 197, 6),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+          ),
+          child: const Text(
+            'Reset',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        // New game
+        ElevatedButton(
+          onPressed: () => ticTacToe.resetGame(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 241, 197, 6),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+          ),
+          child: const Text(
+            'Juego nuevo',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class StatusText extends StatelessWidget {
+  const StatusText({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ticTacToe = context.watch<TicTacToe>();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: ticTacToe.winner != 0
+          ? const BoxDecoration(
+              color: Color.fromARGB(255, 0, 155, 255),
+              borderRadius: BorderRadius.all(
+                Radius.circular(20),
+              ),
+            )
+          : const BoxDecoration(),
+      child: Text(
+        getText(ticTacToe.currentTurn, ticTacToe.winner),
+        style: TextStyle(
+          fontSize: 22,
+          color: ticTacToe.winner == 0 ? Colors.white : Colors.black,
+        ),
+      ),
+    );
+  }
+
+  String getText(int currentTurn, int winner) {
+    switch (winner) {
+      case 0:
+        return currentTurn == TicTacToe.player1
+            ? 'Turno de: Jugador 1'
+            : 'Turno de: Jugador 2';
+      case 1:
+        return 'Gana Jugador 1 🎉';
+      case 2:
+        return 'Gana Jugador 2 🎉';
+
+      case 3:
+        return 'Empate 😒';
+
+      default:
+        return '';
+    }
+  }
+}
+
+class Score extends StatelessWidget {
+  const Score({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 25,
+      children: [
+        Text(
+          'Jugador 1: 30',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+        Text(
+          'Jugador 2: 30',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+        Text(
+          'Empate: 30',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+      ],
     );
   }
 }

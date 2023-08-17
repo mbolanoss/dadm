@@ -131,7 +131,7 @@ class TicTacToe with ChangeNotifier {
     return boardState.any((position) => position == emptySpot);
   }
 
-  void makeTurn(int location) {
+  void makeTurn(int location) async {
     setMove(location);
     checkWinner();
 
@@ -139,7 +139,7 @@ class TicTacToe with ChangeNotifier {
     if (isAgainstCPU && canMakeMove() && winner == 0) {
       int cpuLocation = getComputerMove();
 
-      Future.delayed(const Duration(seconds: 1), () {
+      await Future.delayed(const Duration(seconds: 1), () {
         setMove(cpuLocation);
       });
       checkWinner();
