@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // Buttons
-              GameButtons(),
+              const GameButtons(),
 
               SizedBox(height: screenSize.height * 0.05),
               const Score(),
@@ -77,12 +77,16 @@ class GameButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ticTacToe = context.watch<TicTacToe>();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         // Reset
         ElevatedButton(
-          onPressed: () => {},
+          onPressed: () {
+            ticTacToe.resetHistory();
+            ticTacToe.resetGame();
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromARGB(255, 241, 197, 6),
             shape: const RoundedRectangleBorder(
@@ -102,7 +106,10 @@ class GameButtons extends StatelessWidget {
         ),
         // New game
         ElevatedButton(
-          onPressed: () => ticTacToe.resetGame(),
+          onPressed: () {
+            ticTacToe.saveHistory();
+            ticTacToe.resetGame();
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromARGB(255, 241, 197, 6),
             shape: const RoundedRectangleBorder(
@@ -181,27 +188,29 @@ class Score extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Wrap(
+    final ticTacToe = context.watch<TicTacToe>();
+
+    return Wrap(
       alignment: WrapAlignment.center,
       spacing: 25,
       children: [
         Text(
-          'Jugador 1: 30',
-          style: TextStyle(
+          'Jugador 1: ${ticTacToe.player1Wins}',
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
           ),
         ),
         Text(
-          'Jugador 2: 30',
-          style: TextStyle(
+          'Jugador 2: ${ticTacToe.player2Wins}',
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
           ),
         ),
         Text(
-          'Empate: 30',
-          style: TextStyle(
+          'Empate: ${ticTacToe.ties}',
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
           ),

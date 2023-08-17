@@ -13,7 +13,25 @@ class TicTacToe with ChangeNotifier {
   bool isAgainstCPU = true;
   int winner = 0;
 
-  TicTacToe() {}
+  int player1Wins = 0;
+  int player2Wins = 0;
+  int ties = 0;
+
+  void saveHistory() {
+    player1Wins = winner == 1 ? player1Wins + 1 : player1Wins;
+    player2Wins = winner == 2 ? player2Wins + 1 : player2Wins;
+    ties = winner == 3 ? ties + 1 : ties;
+
+    notifyListeners();
+  }
+
+  void resetHistory() {
+    player1Wins = 0;
+    player2Wins = 0;
+    ties = 0;
+
+    notifyListeners();
+  }
 
   void resetGame() {
     for (int i = 0; i < boardState.length; i++) {
