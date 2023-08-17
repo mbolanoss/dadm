@@ -123,6 +123,7 @@ class TicTacToe with ChangeNotifier {
 
     // If we make it through the previous loop, all places are taken, so it's a tie
     winner = 3;
+
     notifyListeners();
   }
 
@@ -132,13 +133,16 @@ class TicTacToe with ChangeNotifier {
 
   void makeTurn(int location) {
     setMove(location);
+    checkWinner();
 
     //check if is against cpu
-    if (isAgainstCPU && canMakeMove()) {
+    if (isAgainstCPU && canMakeMove() && winner == 0) {
       int cpuLocation = getComputerMove();
-      setMove(cpuLocation);
-    }
 
-    checkWinner();
+      Future.delayed(const Duration(seconds: 1), () {
+        setMove(cpuLocation);
+      });
+      checkWinner();
+    }
   }
 }
