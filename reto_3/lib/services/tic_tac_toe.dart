@@ -125,4 +125,20 @@ class TicTacToe with ChangeNotifier {
     winner = 3;
     notifyListeners();
   }
+
+  bool canMakeMove() {
+    return boardState.any((position) => position == emptySpot);
+  }
+
+  void makeTurn(int location) {
+    setMove(location);
+
+    //check if is against cpu
+    if (isAgainstCPU && canMakeMove()) {
+      int cpuLocation = getComputerMove();
+      setMove(cpuLocation);
+    }
+
+    checkWinner();
+  }
 }
