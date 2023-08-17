@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:reto_3/screens/home_screen.dart';
 import 'package:reto_3/services/tic_tac_toe.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        textTheme: GoogleFonts.signikaTextTheme(),
       ),
       home: HomeScreen(title: 'Tic Tac Toe'),
     );
