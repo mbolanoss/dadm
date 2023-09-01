@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class TicTacToe with ChangeNotifier {
   final boardState = List.filled(9, emptySpot);
+  final winnerPositions = List.filled(3, -1);
 
   static const emptySpot = 0;
   static const player1 = 1;
@@ -36,6 +37,10 @@ class TicTacToe with ChangeNotifier {
   void resetGame() {
     for (int i = 0; i < boardState.length; i++) {
       boardState[i] = emptySpot;
+    }
+
+    for (int i = 0; i < winnerPositions.length; i++) {
+      winnerPositions[i] = -1;
     }
 
     currentTurn = player1;
@@ -76,6 +81,10 @@ class TicTacToe with ChangeNotifier {
       if (boardState[i] == player1 &&
           boardState[i + 1] == player1 &&
           boardState[i + 2] == player1) {
+        winnerPositions[0] = i;
+        winnerPositions[1] = i + 1;
+        winnerPositions[2] = i + 2;
+
         winner = player1;
         notifyListeners();
         return;
@@ -83,6 +92,10 @@ class TicTacToe with ChangeNotifier {
       if (boardState[i] == player2 &&
           boardState[i + 1] == player2 &&
           boardState[i + 2] == player2) {
+        winnerPositions[0] = i;
+        winnerPositions[1] = i + 1;
+        winnerPositions[2] = i + 2;
+
         winner = player2;
         notifyListeners();
         return;
@@ -94,6 +107,10 @@ class TicTacToe with ChangeNotifier {
       if (boardState[i] == player1 &&
           boardState[i + 3] == player1 &&
           boardState[i + 6] == player1) {
+        winnerPositions[0] = i;
+        winnerPositions[1] = i + 3;
+        winnerPositions[2] = i + 6;
+
         winner = player1;
         notifyListeners();
         return;
@@ -101,6 +118,10 @@ class TicTacToe with ChangeNotifier {
       if (boardState[i] == player2 &&
           boardState[i + 3] == player2 &&
           boardState[i + 6] == player2) {
+        winnerPositions[0] = i;
+        winnerPositions[1] = i + 3;
+        winnerPositions[2] = i + 6;
+
         winner = player2;
         notifyListeners();
         return;
@@ -109,21 +130,44 @@ class TicTacToe with ChangeNotifier {
 
     // Check for diagonal wins
     if ((boardState[0] == player1 &&
-            boardState[4] == player1 &&
-            boardState[8] == player1) ||
-        (boardState[2] == player1 &&
-            boardState[4] == player1 &&
-            boardState[6] == player1)) {
+        boardState[4] == player1 &&
+        boardState[8] == player1)) {
+      winnerPositions[0] = 0;
+      winnerPositions[1] = 4;
+      winnerPositions[2] = 8;
+
+      winner = player1;
+      notifyListeners();
+      return;
+    }
+    if ((boardState[2] == player1 &&
+        boardState[4] == player1 &&
+        boardState[6] == player1)) {
+      winnerPositions[0] = 2;
+      winnerPositions[1] = 4;
+      winnerPositions[2] = 6;
       winner = player1;
       notifyListeners();
       return;
     }
     if ((boardState[0] == player2 &&
-            boardState[4] == player2 &&
-            boardState[8] == player2) ||
-        (boardState[2] == player2 &&
-            boardState[4] == player2 &&
-            boardState[6] == player2)) {
+        boardState[4] == player2 &&
+        boardState[8] == player2)) {
+      winnerPositions[0] = 0;
+      winnerPositions[1] = 4;
+      winnerPositions[2] = 8;
+
+      winner = player2;
+      notifyListeners();
+      return;
+    }
+    if ((boardState[2] == player2 &&
+        boardState[4] == player2 &&
+        boardState[6] == player2)) {
+      winnerPositions[0] = 2;
+      winnerPositions[1] = 4;
+      winnerPositions[2] = 6;
+
       winner = player2;
       notifyListeners();
       return;
