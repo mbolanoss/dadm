@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reto_3/services/tic_tac_toe.dart';
 
+import '../widgets/bottom_app_buttons.dart';
 import '../widgets/game_buttons.dart';
 import '../widgets/number_box.dart';
 import '../widgets/status_text.dart';
@@ -51,24 +52,21 @@ class HomeScreen extends StatelessWidget {
                     return NumberBox(position: i);
                   }),
 
-              SizedBox(height: screenSize.height * 0.04),
+              SizedBox(height: screenSize.height * 0.01),
 
               // Status text
               const StatusText(),
 
-              SizedBox(
-                height: screenSize.height * 0.02,
-              ),
+              // // Buttons
+              // const GameButtons(),
 
-              // Buttons
-              const GameButtons(),
-
-              SizedBox(height: screenSize.height * 0.05),
+              SizedBox(height: screenSize.height * 0.01),
               const Score(),
             ],
           ),
         )),
       ),
+      bottomNavigationBar: const BottomAppButtons(),
     );
   }
 }
@@ -82,31 +80,52 @@ class Score extends StatelessWidget {
   Widget build(BuildContext context) {
     final ticTacToe = context.watch<TicTacToe>();
 
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 25,
+    return Column(
       children: [
-        Text(
-          'Jugador 1: ${ticTacToe.player1Wins}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-          ),
+        // Score text
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 25,
+          children: [
+            Text(
+              'Jugador 1: ${ticTacToe.player1Wins}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+            Text(
+              'Jugador 2: ${ticTacToe.player2Wins}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+            Text(
+              'Empate: ${ticTacToe.ties}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
-        Text(
-          'Jugador 2: ${ticTacToe.player2Wins}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
+
+        // Reset score button
+        ElevatedButton(
+          onPressed: () {
+            ticTacToe.resetHistory();
+            // ticTacToe.resetGame();
+          },
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            backgroundColor: const Color.fromARGB(255, 241, 197, 6),
           ),
-        ),
-        Text(
-          'Empate: ${ticTacToe.ties}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
+          child: const Icon(
+            Icons.replay,
+            color: Colors.black,
           ),
-        ),
+        )
       ],
     );
   }
