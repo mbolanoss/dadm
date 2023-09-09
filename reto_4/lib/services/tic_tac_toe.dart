@@ -6,7 +6,7 @@ enum Difficulty { easy, harder, expert }
 
 class TicTacToe with ChangeNotifier {
   final boardState = List.filled(9, emptySpot);
-  final winnerPositions = List.filled(3, -1);
+  List<int> winnerPositions = List.filled(3, -1);
 
   static const emptySpot = 0;
   static const player1 = 1;
@@ -66,7 +66,7 @@ class TicTacToe with ChangeNotifier {
   int getComputerMove() {
     int location = -1;
 
-    // getComputerWinningMove();
+    getComputerWinningMove();
 
     // Random move
     if (currentDifficulty == Difficulty.easy) {
@@ -91,37 +91,32 @@ class TicTacToe with ChangeNotifier {
 
   int getComputerWinningMove() {
     final tempState = List.from(boardState);
+    int tempWinner = 0;
 
     for (int i = 0; i < 9; i++) {
       int prevBoxState = tempState[i];
       if (tempState[i] == emptySpot) {
         tempState[i] = player2;
-        checkWinner(tempState);
-        if (winner == player2) {
-          winner = 0;
+        tempWinner = checkWinner(tempState)[0];
+        if (tempWinner == player2) {
           return i;
         }
 
         tempState[i] = prevBoxState;
-        winner = 0;
       }
     }
 
     return -1;
   }
 
-  int checkWinner(state) {
+  // returns [winner, pos1, pos2, pos3]
+  List<int> checkWinner(state) {
     // Check horizontal wins
     for (int i = 0; i <= 6; i += 3) {
       if (state[i] == currentTurn &&
           state[i + 1] == currentTurn &&
           state[i + 2] == currentTurn) {
-        winnerPositions[0] = i;
-        winnerPositions[1] = i + 1;
-        winnerPositions[2] = i + 2;
-
-        winner = currentTurn;
-        return currentTurn;
+        return [currentTurn, i, i + 1, i + 2];
       }
     }
 
@@ -130,12 +125,7 @@ class TicTacToe with ChangeNotifier {
       if (state[i] == currentTurn &&
           state[i + 3] == currentTurn &&
           state[i + 6] == currentTurn) {
-        winnerPositions[0] = i;
-        winnerPositions[1] = i + 3;
-        winnerPositions[2] = i + 6;
-
-        winner = currentTurn;
-        return currentTurn;
+        return [currentTurn, i, i + 3, i + 6];
       }
     }
 
@@ -143,33 +133,24 @@ class TicTacToe with ChangeNotifier {
     if ((state[0] == currentTurn &&
         state[4] == currentTurn &&
         state[8] == currentTurn)) {
-      winnerPositions[0] = 0;
-      winnerPositions[1] = 4;
-      winnerPositions[2] = 8;
-
-      winner = currentTurn;
-      return currentTurn;
+      return [currentTurn, 0, 4, 8];
     }
     if ((state[2] == currentTurn &&
         state[4] == currentTurn &&
         state[6] == currentTurn)) {
-      winnerPositions[0] = 2;
-      winnerPositions[1] = 4;
-      winnerPositions[2] = 6;
-
-      return currentTurn;
+      return [currentTurn, 2, 4, 6];
     }
 
     // Check for tie
     for (int i = 0; i < 9; i++) {
       // If we find a number, then no one has won yet
       if (state[i] == emptySpot) {
-        return 0;
+        return [0, -1, -1, -1];
       }
     }
 
     // If we make it through the previous loop, all places are taken, so it's a tie
-    return 3;
+    return [3, -1, -1, -1];
   }
 
   bool canMakeMove() {
@@ -178,7 +159,12 @@ class TicTacToe with ChangeNotifier {
 
   void makeTurn(int location) async {
     setMove(location);
-    winner = checkWinner(boardState);
+
+    // Update winner info
+    List<int> winnerStatus = checkWinner(boardState);
+    winner = winnerStatus[0];
+    winnerPositions = winnerStatus.sublist(1, 4);
+
     // next turn
     currentTurn = currentTurn == player1 ? player2 : player1;
     notifyListeners();
@@ -189,11 +175,16 @@ class TicTacToe with ChangeNotifier {
 
       await Future.delayed(const Duration(seconds: 1), () {
         setMove(cpuLocation);
+
+        // Update winner info
+        List<int> winnerStatus = checkWinner(boardState);
+        winner = winnerStatus[0];
+        winnerPositions = winnerStatus.sublist(1, 4);
+
+        // next turn
+        currentTurn = currentTurn == player1 ? player2 : player1;
+        notifyListeners();
       });
-      winner = checkWinner(boardState);
-      // next turn
-      currentTurn = currentTurn == player1 ? player2 : player1;
-      notifyListeners();
     }
   }
 }
