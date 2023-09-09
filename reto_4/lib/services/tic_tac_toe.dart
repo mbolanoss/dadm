@@ -11,7 +11,7 @@ class TicTacToe with ChangeNotifier {
   static const emptySpot = 0;
   static const player1 = 1;
   static const player2 = 2;
-  static Difficulty currentDifficulty = Difficulty.harder;
+  Difficulty currentDifficulty = Difficulty.easy;
 
   int currentTurn = player1;
   bool isAgainstCPU = true;
@@ -20,6 +20,11 @@ class TicTacToe with ChangeNotifier {
   int player1Wins = 0;
   int player2Wins = 0;
   int ties = 0;
+
+  void changeDifficulty(Difficulty newDiff) {
+    currentDifficulty = newDiff;
+    notifyListeners();
+  }
 
   void saveHistory() {
     player1Wins = winner == 1 ? player1Wins + 1 : player1Wins;
@@ -48,7 +53,6 @@ class TicTacToe with ChangeNotifier {
 
     currentTurn = player1;
     winner = 0;
-    currentDifficulty = Difficulty.harder;
     notifyListeners();
   }
 
