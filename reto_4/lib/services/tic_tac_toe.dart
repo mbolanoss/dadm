@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+enum Difficulty { easy, harder, expert }
+
 class TicTacToe with ChangeNotifier {
   final boardState = List.filled(9, emptySpot);
   final winnerPositions = List.filled(3, -1);
@@ -9,6 +11,7 @@ class TicTacToe with ChangeNotifier {
   static const emptySpot = 0;
   static const player1 = 1;
   static const player2 = 2;
+  static Difficulty currentDifficulty = Difficulty.easy;
 
   int currentTurn = player1;
   bool isAgainstCPU = true;
@@ -45,6 +48,7 @@ class TicTacToe with ChangeNotifier {
 
     currentTurn = player1;
     winner = 0;
+    currentDifficulty = Difficulty.easy;
     notifyListeners();
   }
 
@@ -54,139 +58,109 @@ class TicTacToe with ChangeNotifier {
       if (boardState[location] == emptySpot) {
         boardState[location] = currentTurn;
 
-        // next turn
-        currentTurn = currentTurn == player1 ? player2 : player1;
-
         notifyListeners();
       }
     }
   }
 
   int getComputerMove() {
-    Random random = Random();
-    int location;
+    int location = -1;
 
-    while (true) {
-      location = random.nextInt(9);
+    // Random move
+    if (currentDifficulty == Difficulty.easy) {
+      Random random = Random();
 
-      if (boardState[location] == emptySpot) {
-        return location;
+      while (true) {
+        location = random.nextInt(9);
+
+        if (boardState[location] == emptySpot) {
+          return location;
+        }
       }
     }
+    // Winning move
+    else if (currentDifficulty == Difficulty.harder) {
+    }
+    // Winning and blocking move
+    else if (currentDifficulty == Difficulty.expert) {}
+
+    return -1;
   }
 
-  void checkWinner() {
+  int getComputerWinningMove() {
+    int location = -1;
+
+    // Check horizontal win
+    for (int i = 0; i <= 6; i += 3) {
+      final line = [boardState[i], boardState[i + 1], boardState[i + 2]];
+
+      for (int j = 0; j < 2; j++) {}
+    }
+
+    return location;
+  }
+
+  void checkWinner(state) {
     // Check horizontal wins
     for (int i = 0; i <= 6; i += 3) {
-      if (boardState[i] == player1 &&
-          boardState[i + 1] == player1 &&
-          boardState[i + 2] == player1) {
+      if (state[i] == currentTurn &&
+          state[i + 1] == currentTurn &&
+          state[i + 2] == currentTurn) {
         winnerPositions[0] = i;
         winnerPositions[1] = i + 1;
         winnerPositions[2] = i + 2;
 
-        winner = player1;
-        notifyListeners();
-        return;
-      }
-      if (boardState[i] == player2 &&
-          boardState[i + 1] == player2 &&
-          boardState[i + 2] == player2) {
-        winnerPositions[0] = i;
-        winnerPositions[1] = i + 1;
-        winnerPositions[2] = i + 2;
-
-        winner = player2;
-        notifyListeners();
+        winner = currentTurn;
         return;
       }
     }
 
     // Check vertical wins
     for (int i = 0; i <= 2; i++) {
-      if (boardState[i] == player1 &&
-          boardState[i + 3] == player1 &&
-          boardState[i + 6] == player1) {
+      if (state[i] == currentTurn &&
+          state[i + 3] == currentTurn &&
+          state[i + 6] == currentTurn) {
         winnerPositions[0] = i;
         winnerPositions[1] = i + 3;
         winnerPositions[2] = i + 6;
 
-        winner = player1;
-        notifyListeners();
-        return;
-      }
-      if (boardState[i] == player2 &&
-          boardState[i + 3] == player2 &&
-          boardState[i + 6] == player2) {
-        winnerPositions[0] = i;
-        winnerPositions[1] = i + 3;
-        winnerPositions[2] = i + 6;
-
-        winner = player2;
-        notifyListeners();
+        winner = currentTurn;
         return;
       }
     }
 
     // Check for diagonal wins
-    if ((boardState[0] == player1 &&
-        boardState[4] == player1 &&
-        boardState[8] == player1)) {
+    if ((state[0] == currentTurn &&
+        state[4] == currentTurn &&
+        state[8] == currentTurn)) {
       winnerPositions[0] = 0;
       winnerPositions[1] = 4;
       winnerPositions[2] = 8;
 
-      winner = player1;
-      notifyListeners();
+      winner = currentTurn;
       return;
     }
-    if ((boardState[2] == player1 &&
-        boardState[4] == player1 &&
-        boardState[6] == player1)) {
+    if ((state[2] == currentTurn &&
+        state[4] == currentTurn &&
+        state[6] == currentTurn)) {
       winnerPositions[0] = 2;
       winnerPositions[1] = 4;
       winnerPositions[2] = 6;
-      winner = player1;
-      notifyListeners();
-      return;
-    }
-    if ((boardState[0] == player2 &&
-        boardState[4] == player2 &&
-        boardState[8] == player2)) {
-      winnerPositions[0] = 0;
-      winnerPositions[1] = 4;
-      winnerPositions[2] = 8;
-
-      winner = player2;
-      notifyListeners();
-      return;
-    }
-    if ((boardState[2] == player2 &&
-        boardState[4] == player2 &&
-        boardState[6] == player2)) {
-      winnerPositions[0] = 2;
-      winnerPositions[1] = 4;
-      winnerPositions[2] = 6;
-
-      winner = player2;
-      notifyListeners();
+      winner = currentTurn;
       return;
     }
 
     // Check for tie
     for (int i = 0; i < 9; i++) {
       // If we find a number, then no one has won yet
-      if (boardState[i] == emptySpot) {
+      if (state[i] == emptySpot) {
         winner = 0;
-        notifyListeners();
         return;
       }
     }
 
     // If we make it through the previous loop, all places are taken, so it's a tie
     winner = 3;
-
-    notifyListeners();
   }
 
   bool canMakeMove() {
@@ -195,7 +169,10 @@ class TicTacToe with ChangeNotifier {
 
   void makeTurn(int location) async {
     setMove(location);
-    checkWinner();
+    checkWinner(boardState);
+    // next turn
+    currentTurn = currentTurn == player1 ? player2 : player1;
+    notifyListeners();
 
     //check if is against cpu
     if (isAgainstCPU && canMakeMove() && winner == 0) {
@@ -204,7 +181,10 @@ class TicTacToe with ChangeNotifier {
       await Future.delayed(const Duration(seconds: 1), () {
         setMove(cpuLocation);
       });
-      checkWinner();
+      checkWinner(boardState);
+      // next turn
+      currentTurn = currentTurn == player1 ? player2 : player1;
+      notifyListeners();
     }
   }
 }
