@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
             child: Padding(
           padding: EdgeInsets.fromLTRB(
             screenSize.width * 0.13,
-            screenSize.height * 0.04,
+            screenSize.height * 0.02,
             screenSize.width * 0.13,
             0,
           ),
@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
               // Title
               const Title(),
 
-              SizedBox(height: screenSize.height * 0.06),
+              SizedBox(height: screenSize.height * 0.04),
 
               // Board
               GridView.builder(
@@ -56,9 +56,6 @@ class HomeScreen extends StatelessWidget {
 
               // Status text
               const StatusText(),
-
-              // // Buttons
-              // const GameButtons(),
 
               SizedBox(height: screenSize.height * 0.01),
               const Score(),
@@ -79,36 +76,53 @@ class Score extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ticTacToe = context.watch<TicTacToe>();
+    final screenSize = MediaQuery.of(context).size;
 
     return Column(
       children: [
         // Score text
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 25,
-          children: [
-            Text(
-              'Jugador 1: ${ticTacToe.player1Wins}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+        Container(
+          margin: EdgeInsets.only(bottom: screenSize.height * 0.02),
+          padding: EdgeInsets.symmetric(
+            vertical: screenSize.height * 0.01,
+            horizontal: screenSize.width * 0.02,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black38,
+              width: 4,
             ),
-            Text(
-              'Jugador 2: ${ticTacToe.player2Wins}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(10),
             ),
-            Text(
-              'Empate: ${ticTacToe.ties}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
+          ),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 25,
+            children: [
+              Text(
+                'Jugador 1: ${ticTacToe.player1Wins}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
               ),
-            ),
-          ],
+              Text(
+                'Jugador 2: ${ticTacToe.player2Wins}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+              Text(
+                'Empate: ${ticTacToe.ties}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
         ),
 
         // Reset score button
