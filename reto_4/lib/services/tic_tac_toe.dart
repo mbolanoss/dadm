@@ -66,6 +66,8 @@ class TicTacToe with ChangeNotifier {
   int getComputerMove() {
     int location = -1;
 
+    // getComputerWinningMove();
+
     // Random move
     if (currentDifficulty == Difficulty.easy) {
       Random random = Random();
@@ -88,19 +90,27 @@ class TicTacToe with ChangeNotifier {
   }
 
   int getComputerWinningMove() {
-    int location = -1;
+    final tempState = List.from(boardState);
 
-    // Check horizontal win
-    for (int i = 0; i <= 6; i += 3) {
-      final line = [boardState[i], boardState[i + 1], boardState[i + 2]];
+    for (int i = 0; i < 9; i++) {
+      int prevBoxState = tempState[i];
+      if (tempState[i] == emptySpot) {
+        tempState[i] = player2;
+        checkWinner(tempState);
+        if (winner == player2) {
+          winner = 0;
+          return i;
+        }
 
-      for (int j = 0; j < 2; j++) {}
+        tempState[i] = prevBoxState;
+        winner = 0;
+      }
     }
 
-    return location;
+    return -1;
   }
 
-  void checkWinner(state) {
+  int checkWinner(state) {
     // Check horizontal wins
     for (int i = 0; i <= 6; i += 3) {
       if (state[i] == currentTurn &&
@@ -111,7 +121,7 @@ class TicTacToe with ChangeNotifier {
         winnerPositions[2] = i + 2;
 
         winner = currentTurn;
-        return;
+        return currentTurn;
       }
     }
 
@@ -125,7 +135,7 @@ class TicTacToe with ChangeNotifier {
         winnerPositions[2] = i + 6;
 
         winner = currentTurn;
-        return;
+        return currentTurn;
       }
     }
 
@@ -138,7 +148,7 @@ class TicTacToe with ChangeNotifier {
       winnerPositions[2] = 8;
 
       winner = currentTurn;
-      return;
+      return currentTurn;
     }
     if ((state[2] == currentTurn &&
         state[4] == currentTurn &&
@@ -146,21 +156,20 @@ class TicTacToe with ChangeNotifier {
       winnerPositions[0] = 2;
       winnerPositions[1] = 4;
       winnerPositions[2] = 6;
-      winner = currentTurn;
-      return;
+
+      return currentTurn;
     }
 
     // Check for tie
     for (int i = 0; i < 9; i++) {
       // If we find a number, then no one has won yet
       if (state[i] == emptySpot) {
-        winner = 0;
-        return;
+        return 0;
       }
     }
 
     // If we make it through the previous loop, all places are taken, so it's a tie
-    winner = 3;
+    return 3;
   }
 
   bool canMakeMove() {
@@ -169,7 +178,7 @@ class TicTacToe with ChangeNotifier {
 
   void makeTurn(int location) async {
     setMove(location);
-    checkWinner(boardState);
+    winner = checkWinner(boardState);
     // next turn
     currentTurn = currentTurn == player1 ? player2 : player1;
     notifyListeners();
@@ -181,7 +190,7 @@ class TicTacToe with ChangeNotifier {
       await Future.delayed(const Duration(seconds: 1), () {
         setMove(cpuLocation);
       });
-      checkWinner(boardState);
+      winner = checkWinner(boardState);
       // next turn
       currentTurn = currentTurn == player1 ? player2 : player1;
       notifyListeners();
