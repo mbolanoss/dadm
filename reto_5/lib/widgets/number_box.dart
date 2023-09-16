@@ -18,36 +18,40 @@ class NumberBox extends StatelessWidget {
     final ticTacToe = context.watch<TicTacToe>();
     return GridTile(
       child: Container(
-        padding: EdgeInsets.all(15),
-        // decoration: BoxDecoration(
-        //   border: getBorder(position),
-        // ),
+        padding: const EdgeInsets.all(15),
         child: TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: ticTacToe.winnerPositions.contains(position)
-                  ? Colors.amber
-                  : Colors.transparent,
-            ),
-            onPressed: ticTacToe.boardState[position] == TicTacToe.emptySpot &&
-                    ticTacToe.winner == 0
-                ? () {
-                    ticTacToe.makeTurn(position);
-                  }
-                : null,
-            child: Text(
-              ticTacToe.boardState[position] == 0
-                  ? ''
-                  : ticTacToe.boardState[position] == 1
-                      ? 'X'
-                      : 'O',
-              style: TextStyle(
-                fontSize: 40,
-                color: ticTacToe.winnerPositions.contains(position)
-                    ? Colors.black
-                    : Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            )),
+          style: TextButton.styleFrom(
+            backgroundColor: ticTacToe.winnerPositions.contains(position)
+                ? Colors.amber
+                : Colors.transparent,
+          ),
+          onPressed: ticTacToe.boardState[position] == TicTacToe.emptySpot &&
+                  ticTacToe.winner == 0
+              ? () {
+                  ticTacToe.makeTurn(position);
+                }
+              : null,
+          child: ticTacToe.boardState[position] == 0
+              ? const Text("")
+              : ticTacToe.boardState[position] == 1
+                  ? Image.asset("assets/x.png")
+                  : Image.asset("assets/o.png"),
+
+          // Text(
+          //   ticTacToe.boardState[position] == 0
+          //       ? ''
+          //       : ticTacToe.boardState[position] == 1
+          //           ? 'X'
+          //           : 'O',
+          //   style: TextStyle(
+          //     fontSize: 40,
+          //     color: ticTacToe.winnerPositions.contains(position)
+          //         ? Colors.black
+          //         : Colors.white,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
+        ),
       ),
     );
   }
