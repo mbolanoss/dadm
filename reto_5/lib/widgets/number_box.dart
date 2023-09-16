@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,8 +28,20 @@ class NumberBox extends StatelessWidget {
           ),
           onPressed: ticTacToe.boardState[position] == TicTacToe.emptySpot &&
                   ticTacToe.winner == 0
-              ? () {
+              ? () async {
+                  final player = AudioPlayer();
+                  player.play(AssetSource("player1.mp3"));
+
                   ticTacToe.makeTurn(position);
+
+                  if (ticTacToe.isAgainstCPU) {
+                    await Future.delayed(
+                        Duration(
+                            milliseconds: ticTacToe.cpuPlayTime * 1000 - 300),
+                        () {
+                      player.play(AssetSource("player2.mp3"));
+                    });
+                  }
                 }
               : null,
           child: ticTacToe.boardState[position] == 0

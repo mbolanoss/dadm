@@ -7,6 +7,7 @@ enum Difficulty { easy, harder, expert }
 class TicTacToe with ChangeNotifier {
   final boardState = List.filled(9, emptySpot);
   List<int> winnerPositions = List.filled(3, -1);
+  final cpuPlayTime = 2;
 
   static const emptySpot = 0;
   static const player1 = 1;
@@ -185,7 +186,7 @@ class TicTacToe with ChangeNotifier {
     if (isAgainstCPU && canMakeMove() && winner == 0) {
       int cpuLocation = getComputerMove();
 
-      await Future.delayed(const Duration(seconds: 1), () {
+      await Future.delayed(Duration(seconds: cpuPlayTime), () {
         setMove(cpuLocation);
 
         // Update winner info
