@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reto_3/services/tic_tac_toe.dart';
 
+import '../widgets/board.dart';
 import '../widgets/bottom_app_buttons.dart';
 import '../widgets/number_box.dart';
 import '../widgets/score.dart';
@@ -44,16 +45,7 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // Board
-              GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                  ),
-                  itemCount: ticTacToe.boardState.length,
-                  itemBuilder: (BuildContext ctx, int i) {
-                    return NumberBox(position: i);
-                  }),
+              Board(),
 
               // Status text
               Container(
@@ -86,6 +78,7 @@ class HomeScreen extends StatelessWidget {
                 child: const Icon(
                   Icons.replay,
                   color: Colors.black,
+                  size: 30,
                 ),
               ),
             ],
@@ -94,6 +87,28 @@ class HomeScreen extends StatelessWidget {
       ),
       bottomNavigationBar: const BottomAppButtons(),
     );
+  }
+}
+
+class Boxes extends StatelessWidget {
+  const Boxes({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ticTacToe = context.watch<TicTacToe>();
+
+    return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+        ),
+        itemCount: ticTacToe.boardState.length,
+        itemBuilder: (BuildContext ctx, int i) {
+          return NumberBox(position: i);
+        });
   }
 }
 

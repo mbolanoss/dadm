@@ -19,9 +19,9 @@ class NumberBox extends StatelessWidget {
     return GridTile(
       child: Container(
         padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          border: getBorder(position),
-        ),
+        // decoration: BoxDecoration(
+        //   border: getBorder(position),
+        // ),
         child: TextButton(
             style: TextButton.styleFrom(
               backgroundColor: ticTacToe.winnerPositions.contains(position)
