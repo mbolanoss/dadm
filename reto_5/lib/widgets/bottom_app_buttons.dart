@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reto_3/widgets/game_buttons.dart';
+import 'package:reto_3/widgets/bottom_game_buttons.dart';
 
 class BottomAppButtons extends StatelessWidget {
   const BottomAppButtons({
@@ -13,7 +13,7 @@ class BottomAppButtons extends StatelessWidget {
     return BottomAppBar(
       height: screenSize.height * 0.09,
       color: Colors.black38,
-      child: const GameButtons(),
+      child: const BottomGameButtons(),
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:reto_3/services/tic_tac_toe.dart';
 
 import '../widgets/bottom_app_buttons.dart';
-import '../widgets/game_buttons.dart';
 import '../widgets/number_box.dart';
+import '../widgets/score.dart';
 import '../widgets/status_text.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
             child: Padding(
           padding: EdgeInsets.fromLTRB(
             screenSize.width * 0.13,
-            screenSize.height * 0.02,
+            0,
             screenSize.width * 0.13,
             0,
           ),
@@ -36,9 +36,12 @@ class HomeScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               // Title
-              const Title(),
-
-              SizedBox(height: screenSize.height * 0.04),
+              Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: screenSize.height * 0.04,
+                ),
+                child: const Title(),
+              ),
 
               // Board
               GridView.builder(
@@ -52,95 +55,44 @@ class HomeScreen extends StatelessWidget {
                     return NumberBox(position: i);
                   }),
 
-              SizedBox(height: screenSize.height * 0.01),
-
               // Status text
-              const StatusText(),
+              Container(
+                margin: EdgeInsets.only(
+                  top: screenSize.height * 0.03,
+                  bottom: screenSize.height * 0.01,
+                ),
+                child: const StatusText(),
+              ),
 
-              SizedBox(height: screenSize.height * 0.01),
-              const Score(),
+              // Score
+              Container(
+                margin: EdgeInsets.only(
+                  top: screenSize.height * 0.01,
+                  bottom: screenSize.height * 0.01,
+                ),
+                child: const Score(),
+              ),
+
+              // Reset score button
+              ElevatedButton(
+                onPressed: () {
+                  ticTacToe.resetHistory();
+                  // ticTacToe.resetGame();
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  backgroundColor: const Color.fromARGB(255, 241, 197, 6),
+                ),
+                child: const Icon(
+                  Icons.replay,
+                  color: Colors.black,
+                ),
+              ),
             ],
           ),
         )),
       ),
       bottomNavigationBar: const BottomAppButtons(),
-    );
-  }
-}
-
-class Score extends StatelessWidget {
-  const Score({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final ticTacToe = context.watch<TicTacToe>();
-    final screenSize = MediaQuery.of(context).size;
-
-    return Column(
-      children: [
-        // Score text
-        Container(
-          margin: EdgeInsets.only(bottom: screenSize.height * 0.02),
-          padding: EdgeInsets.symmetric(
-            vertical: screenSize.height * 0.01,
-            horizontal: screenSize.width * 0.02,
-          ),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black38,
-              width: 4,
-            ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 25,
-            children: [
-              Text(
-                'Jugador 1: ${ticTacToe.player1Wins}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-              Text(
-                'Jugador 2: ${ticTacToe.player2Wins}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-              Text(
-                'Empate: ${ticTacToe.ties}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Reset score button
-        ElevatedButton(
-          onPressed: () {
-            ticTacToe.resetHistory();
-            // ticTacToe.resetGame();
-          },
-          style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            backgroundColor: const Color.fromARGB(255, 241, 197, 6),
-          ),
-          child: const Icon(
-            Icons.replay,
-            color: Colors.black,
-          ),
-        )
-      ],
     );
   }
 }
