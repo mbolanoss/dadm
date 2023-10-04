@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reto_3/services/tic_tac_toe.dart';
+import 'package:reto_3/widgets/bottom_game_buttons.dart';
 
 import '../widgets/board.dart';
 import '../widgets/bottom_app_buttons.dart';
@@ -23,47 +24,99 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 40, 60, 79),
       body: SafeArea(
-        child: Center(
-            child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            screenSize.width * 0.13,
-            0,
-            screenSize.width * 0.13,
-            0,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              // Board
-              Container(
-                margin: EdgeInsets.only(
-                  top: screenSize.height * 0.1,
-                ),
-                child: Board(),
-              ),
+        child: OrientationBuilder(
+          builder: (_, orientation) {
+            //Orientacion vertical
+            if (orientation == Orientation.portrait) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    screenSize.width * 0.13,
+                    0,
+                    screenSize.width * 0.13,
+                    0,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      // Board
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: screenSize.height * 0.1,
+                        ),
+                        child: Board(),
+                      ),
 
-              // Status text
-              Container(
-                margin: EdgeInsets.only(
-                  top: screenSize.height * 0.03,
-                  bottom: screenSize.height * 0.01,
-                ),
-                child: const StatusText(),
-              ),
+                      // Status text
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: screenSize.height * 0.03,
+                          bottom: screenSize.height * 0.01,
+                        ),
+                        child: const StatusText(),
+                      ),
 
-              // Score
-              Container(
-                margin: EdgeInsets.only(
-                  top: screenSize.height * 0.01,
-                  bottom: screenSize.height * 0.01,
+                      // Score
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: screenSize.height * 0.01,
+                          bottom: screenSize.height * 0.01,
+                        ),
+                        child: const Score(),
+                      ),
+
+                      BottomGameButtons()
+                    ],
+                  ),
                 ),
-                child: const Score(),
-              ),
-            ],
-          ),
-        )),
+              );
+            }
+            // Orientacion horizontal
+            else if (orientation == Orientation.landscape) {
+              return Row(
+                children: [
+                  SizedBox(
+                    width: 30,
+                  ),
+                  // Board
+                  Expanded(
+                    child: Boxes(),
+                  ),
+
+                  SizedBox(
+                    width: 30,
+                  ),
+
+                  Column(
+                    children: [
+                      // Status text
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: screenSize.height * 0.03,
+                          bottom: screenSize.height * 0.01,
+                        ),
+                        child: const StatusText(),
+                      ),
+                      // Score
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: screenSize.height * 0.01,
+                          bottom: screenSize.height * 0.01,
+                        ),
+                        child: const Score(),
+                      ),
+
+                      BottomGameButtons(),
+                    ],
+                  ),
+                ],
+              );
+            } else {
+              return Text('Error');
+            }
+          },
+        ),
       ),
-      bottomNavigationBar: const BottomAppButtons(),
     );
   }
 }
@@ -78,7 +131,7 @@ class Boxes extends StatelessWidget {
     final ticTacToe = context.watch<TicTacToe>();
 
     return GridView.builder(
-        shrinkWrap: true,
+        // shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,

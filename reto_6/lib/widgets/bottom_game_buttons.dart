@@ -12,12 +12,13 @@ class BottomGameButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return const Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 15,
       children: [
-        NewGameButton(),
         DifficultyButton(),
         CloseButton(),
+        NewGameButton(),
       ],
     );
   }

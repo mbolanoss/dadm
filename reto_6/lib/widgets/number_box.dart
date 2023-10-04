@@ -11,14 +11,14 @@ class NumberBox extends StatelessWidget {
   });
 
   final int position;
-  static const BorderSide border =
-      BorderSide(color: Color.fromARGB(255, 0, 155, 255), width: 4);
+  static const BorderSide border = BorderSide(color: Colors.grey, width: 4);
 
   @override
   Widget build(BuildContext context) {
     final ticTacToe = context.watch<TicTacToe>();
     return GridTile(
       child: Container(
+        decoration: BoxDecoration(border: getBorder(position)),
         padding: const EdgeInsets.all(15),
         child: TextButton(
           style: TextButton.styleFrom(
@@ -49,21 +49,6 @@ class NumberBox extends StatelessWidget {
               : ticTacToe.boardState[position] == 1
                   ? Image.asset("assets/x.png")
                   : Image.asset("assets/o.png"),
-
-          // Text(
-          //   ticTacToe.boardState[position] == 0
-          //       ? ''
-          //       : ticTacToe.boardState[position] == 1
-          //           ? 'X'
-          //           : 'O',
-          //   style: TextStyle(
-          //     fontSize: 40,
-          //     color: ticTacToe.winnerPositions.contains(position)
-          //         ? Colors.black
-          //         : Colors.white,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
         ),
       ),
     );
@@ -72,23 +57,28 @@ class NumberBox extends StatelessWidget {
   BoxBorder getBorder(int position) {
     switch (position) {
       case 0:
-        return const BorderDirectional(bottom: border, end: border);
+        return const BorderDirectional(
+            bottom: border, end: border, start: border, top: border);
       case 1:
-        return const BorderDirectional(bottom: border, end: border);
+        return const BorderDirectional(
+            bottom: border, end: border, top: border);
       case 2:
-        return const BorderDirectional(bottom: border);
+        return const BorderDirectional(
+            bottom: border, top: border, end: border);
       case 3:
-        return const BorderDirectional(bottom: border, end: border);
+        return const BorderDirectional(
+            bottom: border, end: border, start: border);
       case 4:
         return const BorderDirectional(bottom: border, end: border);
       case 5:
-        return const BorderDirectional(bottom: border);
+        return const BorderDirectional(bottom: border, end: border);
       case 6:
-        return const BorderDirectional(end: border);
+        return const BorderDirectional(
+            end: border, start: border, bottom: border);
       case 7:
-        return const BorderDirectional(end: border);
+        return const BorderDirectional(end: border, bottom: border);
       case 8:
-        return const BorderDirectional();
+        return const BorderDirectional(end: border, bottom: border);
       default:
         return const BorderDirectional();
     }
