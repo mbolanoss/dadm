@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:reto_3/services/tic_tac_toe.dart';
 import 'package:reto_3/widgets/bottom_game_buttons.dart';
 
-import '../widgets/board.dart';
-import '../widgets/bottom_app_buttons.dart';
 import '../widgets/number_box.dart';
 import '../widgets/score.dart';
 import '../widgets/status_text.dart';
@@ -12,7 +10,7 @@ import '../widgets/status_text.dart';
 class HomeScreen extends StatelessWidget {
   final String title;
 
-  HomeScreen({
+  const HomeScreen({
     super.key,
     required this.title,
   });
@@ -73,7 +71,7 @@ class HomeScreen extends StatelessWidget {
               return Row(
                 children: [
                   const SizedBox(
-                    width: 60,
+                    width: 40,
                   ),
                   // Board
                   const Expanded(
@@ -81,30 +79,39 @@ class HomeScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(
-                    width: 60,
+                    width: 10,
                   ),
 
-                  Column(
-                    children: [
-                      // Status text
-                      Container(
-                        margin: EdgeInsets.only(
-                          top: screenSize.height * 0.03,
-                          bottom: screenSize.height * 0.01,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Status text
+                        Container(
+                          margin: EdgeInsets.only(
+                            bottom: screenSize.height * 0.02,
+                          ),
+                          child: const StatusText(),
                         ),
-                        child: const StatusText(),
-                      ),
-                      // Score
-                      Container(
-                        margin: EdgeInsets.only(
-                          top: screenSize.height * 0.01,
-                          bottom: screenSize.height * 0.01,
+                        // Score
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: screenSize.height * 0.02,
+                          ),
+                          child: const Score(),
                         ),
-                        child: const Score(),
-                      ),
 
-                      const BottomGameButtons(),
-                    ],
+                        Container(
+                          margin: const EdgeInsets.only(
+                            top: 40,
+                          ),
+                          child: const BottomGameButtons(),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               );
