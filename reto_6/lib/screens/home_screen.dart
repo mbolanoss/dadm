@@ -18,8 +18,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ticTacToe = context.watch<TicTacToe>();
-
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -63,23 +61,6 @@ class HomeScreen extends StatelessWidget {
                   bottom: screenSize.height * 0.01,
                 ),
                 child: const Score(),
-              ),
-
-              // Reset score button
-              ElevatedButton(
-                onPressed: () {
-                  ticTacToe.resetHistory();
-                  // ticTacToe.resetGame();
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  backgroundColor: const Color.fromARGB(255, 241, 197, 6),
-                ),
-                child: const Icon(
-                  Icons.replay,
-                  color: Colors.black,
-                  size: 30,
-                ),
               ),
             ],
           ),

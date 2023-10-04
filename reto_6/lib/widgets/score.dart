@@ -59,7 +59,35 @@ class Score extends StatelessWidget {
             ],
           ),
         ),
+        ResetScoreButton(),
       ],
+    );
+  }
+}
+
+class ResetScoreButton extends StatelessWidget {
+  const ResetScoreButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ticTacToe = context.watch<TicTacToe>();
+
+    return ElevatedButton(
+      onPressed: () {
+        ticTacToe.resetHistory();
+        // ticTacToe.resetGame();
+      },
+      style: ElevatedButton.styleFrom(
+        shape: const CircleBorder(),
+        backgroundColor: const Color.fromARGB(255, 241, 197, 6),
+      ),
+      child: const Icon(
+        Icons.replay,
+        color: Colors.black,
+        size: 30,
+      ),
     );
   }
 }
