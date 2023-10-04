@@ -34,16 +34,13 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              // Title
-              Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: screenSize.height * 0.04,
-                ),
-                child: const Title(),
-              ),
-
               // Board
-              Board(),
+              Container(
+                margin: EdgeInsets.only(
+                  top: screenSize.height * 0.1,
+                ),
+                child: Board(),
+              ),
 
               // Status text
               Container(
