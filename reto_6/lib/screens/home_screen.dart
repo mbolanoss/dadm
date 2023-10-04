@@ -37,21 +37,18 @@ class HomeScreen extends StatelessWidget {
                     0,
                   ),
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       // Board
-                      Container(
-                        margin: EdgeInsets.only(
-                          top: screenSize.height * 0.1,
-                        ),
-                        child: Board(),
+                      const SizedBox(
+                        height: 300,
+                        child: Boxes(),
                       ),
 
                       // Status text
                       Container(
-                        margin: EdgeInsets.only(
-                          top: screenSize.height * 0.03,
-                          bottom: screenSize.height * 0.01,
+                        margin: EdgeInsets.symmetric(
+                          vertical: screenSize.height * 0.01,
                         ),
                         child: const StatusText(),
                       ),
@@ -60,12 +57,12 @@ class HomeScreen extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(
                           top: screenSize.height * 0.01,
-                          bottom: screenSize.height * 0.01,
+                          bottom: screenSize.height * 0.03,
                         ),
                         child: const Score(),
                       ),
 
-                      BottomGameButtons()
+                      const BottomGameButtons()
                     ],
                   ),
                 ),
@@ -75,16 +72,16 @@ class HomeScreen extends StatelessWidget {
             else if (orientation == Orientation.landscape) {
               return Row(
                 children: [
-                  SizedBox(
-                    width: 30,
+                  const SizedBox(
+                    width: 60,
                   ),
                   // Board
-                  Expanded(
+                  const Expanded(
                     child: Boxes(),
                   ),
 
-                  SizedBox(
-                    width: 30,
+                  const SizedBox(
+                    width: 60,
                   ),
 
                   Column(
@@ -106,13 +103,13 @@ class HomeScreen extends StatelessWidget {
                         child: const Score(),
                       ),
 
-                      BottomGameButtons(),
+                      const BottomGameButtons(),
                     ],
                   ),
                 ],
               );
             } else {
-              return Text('Error');
+              return const Text('Error');
             }
           },
         ),
