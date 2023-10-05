@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum Difficulty { easy, harder, expert }
 
@@ -21,6 +22,36 @@ class TicTacToe with ChangeNotifier {
   int player1Wins = 0;
   int player2Wins = 0;
   int ties = 0;
+
+  void initGame() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    player1Wins = prefs.getInt('player1Wins') ?? 0;
+    player2Wins = prefs.getInt('player2Wins') ?? 0;
+    ties = prefs.getInt('ties') ?? 0;
+
+    final difficulty = prefs.getInt('difficulty') ?? 1;
+    currentDifficulty = difficulty == 1
+        ? Difficulty.easy
+        : difficulty == 2
+            ? Difficulty.expert
+            : Difficulty.harder;
+  }
+
+  void saveGameState() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setInt('player1Wins', player1Wins);
+    await prefs.setInt('player2Wins', player2Wins);
+    await prefs.setInt('ties', ties);
+
+    final difficulty = currentDifficulty == Difficulty.easy
+        ? 1
+        : currentDifficulty == Difficulty.harder
+            ? 2
+            : 3;
+    await prefs.setInt('difficulty', difficulty);
+  }
 
   void changeDifficulty(Difficulty newDiff) {
     currentDifficulty = newDiff;
