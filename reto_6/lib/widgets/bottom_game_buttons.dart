@@ -101,8 +101,10 @@ class CloseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ticTacToe = context.watch<TicTacToe>();
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
+        await ticTacToe.saveGameState();
         SystemNavigator.pop();
       },
       style: ElevatedButton.styleFrom(

@@ -23,7 +23,7 @@ class TicTacToe with ChangeNotifier {
   int player2Wins = 0;
   int ties = 0;
 
-  void initGame() async {
+  Future<void> initGame() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     player1Wins = prefs.getInt('player1Wins') ?? 0;
@@ -38,7 +38,7 @@ class TicTacToe with ChangeNotifier {
             : Difficulty.harder;
   }
 
-  void saveGameState() async {
+  Future<void> saveGameState() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setInt('player1Wins', player1Wins);
