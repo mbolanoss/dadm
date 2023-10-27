@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.signikaTextTheme(),
       ),
       routes: {
-        '/': (_) => const HomeScreen(),
+        '/': (_) => HomeScreen(),
         '/game': (_) => const GameScreen(),
       },
     );
