@@ -3,6 +3,7 @@ import 'package:reto_3/models/game.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TicTacToe with ChangeNotifier {
+  String? gameId;
   final boardState = List.filled(9, emptySpot);
   List<int> winnerPositions = List.filled(3, -1);
 
@@ -18,6 +19,7 @@ class TicTacToe with ChangeNotifier {
   int ties = 0;
 
   void loadGame(Game game) {
+    gameId = game.id;
     player1Wins = game.player1wins!;
     player2Wins = game.player2wins!;
     ties = game.ties!;
@@ -49,7 +51,7 @@ class TicTacToe with ChangeNotifier {
     await prefs.setInt('ties', ties);
   }
 
-  void saveHistory() {
+  void saveScore() {
     player1Wins = winner == 1 ? player1Wins + 1 : player1Wins;
     player2Wins = winner == 2 ? player2Wins + 1 : player2Wins;
     ties = winner == 3 ? ties + 1 : ties;
@@ -57,7 +59,7 @@ class TicTacToe with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetHistory() {
+  void resetScore() {
     player1Wins = 0;
     player2Wins = 0;
     ties = 0;

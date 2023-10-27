@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:reto_3/models/game.dart';
-import 'package:reto_3/services/tic_tac_toe.dart';
 
 import '../models/move.dart';
 
@@ -55,11 +54,15 @@ class FirestoreService {
     });
   }
 
-  Future<void> resetScore(Game game) async {
-    await _firestore.collection('matches').doc(game.id).update({
-      'player1_wins': game.player1wins,
-      'player2_wins': game.player2wins,
-      'ties': game.ties,
+  Future<void> resetScore(
+    String gameId,
+  ) async {
+    await _firestore.collection('matches').doc(gameId).update({
+      'player1_wins': 0,
+      'player2_wins': 0,
+      'ties': 0,
     });
   }
+
+  Future<void> resetGame() async {}
 }

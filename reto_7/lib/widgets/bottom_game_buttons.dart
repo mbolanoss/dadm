@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:reto_3/services/firestore_service.dart';
 
 import '../services/tic_tac_toe.dart';
 
@@ -11,7 +12,7 @@ class BottomGameButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Wrap(
+    return Wrap(
       alignment: WrapAlignment.center,
       spacing: 15,
       children: [
@@ -23,7 +24,8 @@ class BottomGameButtons extends StatelessWidget {
 }
 
 class NewGameButton extends StatelessWidget {
-  const NewGameButton({
+  final firestoreService = FirestoreService();
+  NewGameButton({
     super.key,
   });
 
@@ -33,8 +35,10 @@ class NewGameButton extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: () {
-        ticTacToe.saveHistory();
+        ticTacToe.saveScore();
         ticTacToe.resetGame();
+
+        firestoreService.resetGame();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 241, 197, 6),

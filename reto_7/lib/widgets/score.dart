@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../services/firestore_service.dart';
 import '../services/tic_tac_toe.dart';
 
 class Score extends StatelessWidget {
@@ -66,7 +67,9 @@ class Score extends StatelessWidget {
 }
 
 class ResetScoreButton extends StatelessWidget {
-  const ResetScoreButton({
+  final firestoreService = FirestoreService();
+
+  ResetScoreButton({
     super.key,
   });
 
@@ -76,8 +79,9 @@ class ResetScoreButton extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: () {
-        ticTacToe.resetHistory();
-        // ticTacToe.resetGame();
+        ticTacToe.resetScore();
+
+        firestoreService.resetScore(ticTacToe.gameId!);
       },
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
