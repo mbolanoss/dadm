@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "719958562111",
+    "project_id": "tic-tac-toe-a5735",
+    "storage_bucket": "tic-tac-toe-a5735.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719958562111:android:f04b72c4b611ce327eef8a",
+        "android_client_info": {
+          "package_name": "com.mbolanoss.reto_7"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfRyHs18lC5DJh-9l7_fY-0MKSjrXi-rs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
