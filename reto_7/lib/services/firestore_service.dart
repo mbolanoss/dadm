@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:reto_3/models/game.dart';
+import 'package:reto_3/services/tic_tac_toe.dart';
 
 import '../models/move.dart';
 
@@ -14,6 +15,7 @@ class FirestoreService {
     for (final game in gamesRaw.docs) {
       final newGame = Game.fromJSON(game.data());
       newGame.history = await getAllGameMoves(game.id);
+      newGame.id = game.id;
       gamesList.add(newGame);
     }
 
@@ -32,5 +34,32 @@ class FirestoreService {
     }
 
     return List.from(movesList.reversed);
+  }
+
+  Future<void> sendMove(Move move, String gameId) async {
+    final moveJson = move.toJSON();
+
+    await _firestore
+        .collection('matches')
+        .doc(gameId)
+        .collection('history')
+        .add(moveJson);
+  }
+
+  Future<void> saveGame(Game game) async {
+    await _firestore.collection('matches').doc(game.id).update({
+      'player1_wins': game.player1wins,
+      'player2_wins': game.player2wins,
+      'ties': game.ties,
+      'turn': game.turn
+    });
+  }
+
+  Future<void> resetScore(Game game) async {
+    await _firestore.collection('matches').doc(game.id).update({
+      'player1_wins': game.player1wins,
+      'player2_wins': game.player2wins,
+      'ties': game.ties,
+    });
   }
 }

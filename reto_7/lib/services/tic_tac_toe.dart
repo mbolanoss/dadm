@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:reto_3/models/game.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum Difficulty { easy, harder, expert }
-
 class TicTacToe with ChangeNotifier {
   final boardState = List.filled(9, emptySpot);
   List<int> winnerPositions = List.filled(3, -1);
@@ -11,7 +9,6 @@ class TicTacToe with ChangeNotifier {
   static const emptySpot = 0;
   static const player1 = 1;
   static const player2 = 2;
-  Difficulty currentDifficulty = Difficulty.easy;
 
   int currentTurn = player1;
   int winner = 0;
@@ -24,8 +21,6 @@ class TicTacToe with ChangeNotifier {
     player1Wins = game.player1wins!;
     player2Wins = game.player2wins!;
     ties = game.ties!;
-
-    currentDifficulty = game.difficulty!;
 
     for (final move in game.history!) {
       if (move.playerId! == game.player1Id) {
@@ -44,13 +39,6 @@ class TicTacToe with ChangeNotifier {
     player1Wins = prefs.getInt('player1Wins') ?? 0;
     player2Wins = prefs.getInt('player2Wins') ?? 0;
     ties = prefs.getInt('ties') ?? 0;
-
-    final difficulty = prefs.getInt('difficulty') ?? 1;
-    currentDifficulty = difficulty == 1
-        ? Difficulty.easy
-        : difficulty == 2
-            ? Difficulty.expert
-            : Difficulty.harder;
   }
 
   Future<void> saveGameState() async {
@@ -59,18 +47,6 @@ class TicTacToe with ChangeNotifier {
     await prefs.setInt('player1Wins', player1Wins);
     await prefs.setInt('player2Wins', player2Wins);
     await prefs.setInt('ties', ties);
-
-    final difficulty = currentDifficulty == Difficulty.easy
-        ? 1
-        : currentDifficulty == Difficulty.harder
-            ? 2
-            : 3;
-    await prefs.setInt('difficulty', difficulty);
-  }
-
-  void changeDifficulty(Difficulty newDiff) {
-    currentDifficulty = newDiff;
-    notifyListeners();
   }
 
   void saveHistory() {

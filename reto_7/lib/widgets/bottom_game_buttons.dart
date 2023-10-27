@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/tic_tac_toe.dart';
-import 'difficulty_list.dart';
 
 class BottomGameButtons extends StatelessWidget {
   const BottomGameButtons({
@@ -16,7 +15,6 @@ class BottomGameButtons extends StatelessWidget {
       alignment: WrapAlignment.center,
       spacing: 15,
       children: [
-        DifficultyButton(),
         CloseButton(),
         NewGameButton(),
       ],
@@ -53,42 +51,6 @@ class NewGameButton extends StatelessWidget {
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
-      ),
-    );
-  }
-}
-
-class DifficultyButton extends StatelessWidget {
-  const DifficultyButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: DifficultyList(),
-              );
-            });
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 241, 197, 6),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-      ),
-      child: const Icon(
-        Icons.settings,
-        color: Colors.black,
       ),
     );
   }

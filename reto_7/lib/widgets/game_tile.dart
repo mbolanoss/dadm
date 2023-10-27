@@ -37,15 +37,7 @@ class GameTile extends StatelessWidget {
           ),
 
           const SizedBox(height: 10),
-          // Dificultad
-          Text(
-            'Dificultad: ${game.difficulty == Difficulty.easy ? 'Fácil' : game.difficulty == Difficulty.harder ? 'Difícil' : 'Experto'}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            ),
-          ),
-          const SizedBox(height: 10),
+
           Text(
             'Turno: J${game.turn}',
             style: const TextStyle(
