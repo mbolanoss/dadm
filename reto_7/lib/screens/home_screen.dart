@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:reto_3/services/firestore_service.dart';
 import 'package:reto_3/widgets/game_tile.dart';
 
