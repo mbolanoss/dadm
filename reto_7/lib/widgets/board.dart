@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reto_3/screens/home_screen.dart';
+import 'package:reto_3/screens/game_screen.dart';
 
 class Board extends StatelessWidget {
   const Board({
@@ -14,7 +14,7 @@ class Board extends StatelessWidget {
       // ignore: prefer_const_constructors
       // size: Size(double.infinity, double.infinity),
       painter: LinesPainter(screenSize),
-      child: Boxes(),
+      child: const Boxes(),
     );
   }
 }
