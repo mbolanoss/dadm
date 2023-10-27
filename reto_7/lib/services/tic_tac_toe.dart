@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:reto_3/models/game.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TicTacToe with ChangeNotifier {
   String? gameId;
@@ -33,22 +32,6 @@ class TicTacToe with ChangeNotifier {
     }
 
     notifyListeners();
-  }
-
-  Future<void> initGame() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    player1Wins = prefs.getInt('player1Wins') ?? 0;
-    player2Wins = prefs.getInt('player2Wins') ?? 0;
-    ties = prefs.getInt('ties') ?? 0;
-  }
-
-  Future<void> saveGameState() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    await prefs.setInt('player1Wins', player1Wins);
-    await prefs.setInt('player2Wins', player2Wins);
-    await prefs.setInt('ties', ties);
   }
 
   void saveScore() {
@@ -126,10 +109,6 @@ class TicTacToe with ChangeNotifier {
 
     // If we make it through the previous loop, all places are taken, so it's a tie
     return [3, -1, -1, -1];
-  }
-
-  bool canMakeMove() {
-    return boardState.any((position) => position == emptySpot);
   }
 
   void makeTurn(int location) async {
