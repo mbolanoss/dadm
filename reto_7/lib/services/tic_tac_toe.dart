@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:reto_3/models/game.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum Difficulty { easy, harder, expert }
@@ -22,6 +23,24 @@ class TicTacToe with ChangeNotifier {
   int player1Wins = 0;
   int player2Wins = 0;
   int ties = 0;
+
+  void loadGame(Game game) {
+    player1Wins = game.player1wins!;
+    player2Wins = game.player2wins!;
+    ties = game.ties!;
+
+    currentDifficulty = game.difficulty!;
+
+    for (final move in game.history!) {
+      if (move.playerId! == game.player1Id) {
+        boardState[move.position!] = player1;
+      } else if (move.playerId! == game.player2Id) {
+        boardState[move.position!] = player2;
+      }
+    }
+
+    notifyListeners();
+  }
 
   Future<void> initGame() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

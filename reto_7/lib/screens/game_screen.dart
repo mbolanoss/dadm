@@ -161,34 +161,3 @@ class Boxes extends StatelessWidget {
         });
   }
 }
-
-class Title extends StatelessWidget {
-  const Title({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
-    return Column(
-      children: [
-        const Text(
-          'TicTacToe',
-          style: TextStyle(
-            fontSize: 38,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Container(
-          width: screenSize.width * 0.4,
-          height: 4,
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(5))),
-        )
-      ],
-    );
-  }
-}
