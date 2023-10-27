@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:reto_3/models/game.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +7,6 @@ enum Difficulty { easy, harder, expert }
 class TicTacToe with ChangeNotifier {
   final boardState = List.filled(9, emptySpot);
   List<int> winnerPositions = List.filled(3, -1);
-  final cpuPlayTime = 2;
 
   static const emptySpot = 0;
   static const player1 = 1;
@@ -17,7 +14,6 @@ class TicTacToe with ChangeNotifier {
   Difficulty currentDifficulty = Difficulty.easy;
 
   int currentTurn = player1;
-  bool isAgainstCPU = true;
   int winner = 0;
 
   int player1Wins = 0;
@@ -118,68 +114,6 @@ class TicTacToe with ChangeNotifier {
     }
   }
 
-  int getComputerMove() {
-    int location = -1;
-
-    // Random move
-    if (currentDifficulty == Difficulty.easy) {
-      location = getComputerRandomMove();
-    }
-    // Winning -> random
-    else if (currentDifficulty == Difficulty.harder) {
-      final winningMove = getComputerSmartMove(true);
-
-      location = winningMove != -1 ? winningMove : getComputerRandomMove();
-    }
-    // Winning -> blocking -> random
-    else if (currentDifficulty == Difficulty.expert) {
-      final winningMove = getComputerSmartMove(true);
-      final blockingMove = getComputerSmartMove(false);
-
-      location = winningMove != -1
-          ? winningMove
-          : blockingMove != -1
-              ? blockingMove
-              : getComputerRandomMove();
-    }
-
-    return location;
-  }
-
-  int getComputerRandomMove() {
-    int location = -1;
-    Random random = Random();
-
-    while (true) {
-      location = random.nextInt(9);
-
-      if (boardState[location] == emptySpot) {
-        return location;
-      }
-    }
-  }
-
-  int getComputerSmartMove(bool isWinningMove) {
-    final tempState = List.from(boardState);
-    final otherPlayer = isWinningMove ? player2 : player1;
-    int tempWinner = 0;
-
-    for (int i = 0; i < 9; i++) {
-      int prevBoxState = tempState[i];
-      if (tempState[i] == emptySpot) {
-        tempState[i] = otherPlayer;
-        tempWinner = checkWinner(tempState, otherPlayer)[0];
-        if (tempWinner == otherPlayer) {
-          return i;
-        }
-
-        tempState[i] = prevBoxState;
-      }
-    }
-
-    return -1;
-  }
-
   // returns [winner, pos1, pos2, pos3]
   List<int> checkWinner(state, turn) {
     // Check horizontal wins
@@ -231,23 +165,5 @@ class TicTacToe with ChangeNotifier {
     // next turn
     currentTurn = currentTurn == player1 ? player2 : player1;
     notifyListeners();
-
-    //check if is against cpu
-    if (isAgainstCPU && canMakeMove() && winner == 0) {
-      int cpuLocation = getComputerMove();
-
-      await Future.delayed(Duration(seconds: cpuPlayTime), () {
-        setMove(cpuLocation);
-
-        // Update winner info
-        List<int> winnerStatus = checkWinner(boardState, currentTurn);
-        winner = winnerStatus[0];
-        winnerPositions = winnerStatus.sublist(1, 4);
-
-        // next turn
-        currentTurn = currentTurn == player1 ? player2 : player1;
-        notifyListeners();
-      });
-    }
   }
 }
