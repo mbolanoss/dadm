@@ -41,6 +41,18 @@ class TicTacToe with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateBoardState(List<Move> moves) {
+    for (final move in moves) {
+      if (move.playerId! == player1Id) {
+        boardState[move.position!] = player1;
+      } else if (move.playerId! == player2Id) {
+        boardState[move.position!] = player2;
+      }
+    }
+
+    // notifyListeners();
+  }
+
   void saveScore() {
     player1Wins = winner == 1 ? player1Wins + 1 : player1Wins;
     player2Wins = winner == 2 ? player2Wins + 1 : player2Wins;

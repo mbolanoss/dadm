@@ -82,7 +82,17 @@ class FirestoreService {
     return doc.data()!['turn'];
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getTurnStream(String gameId) {
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getGameInfoStream(
+      String gameId) {
     return _firestore.collection('matches').doc(gameId).snapshots();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getGameHistoryStream(
+      String gameId) {
+    return _firestore
+        .collection('matches')
+        .doc(gameId)
+        .collection('history')
+        .snapshots();
   }
 }

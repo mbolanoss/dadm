@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reto_3/services/firestore_service.dart';
 import 'package:reto_3/services/tic_tac_toe.dart';
 import 'package:reto_3/widgets/bottom_game_buttons.dart';
 
@@ -36,7 +38,7 @@ class GameScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Board
-                      const SizedBox(
+                      SizedBox(
                         height: 300,
                         child: Boxes(),
                       ),
@@ -72,7 +74,7 @@ class GameScreen extends StatelessWidget {
                     width: 40,
                   ),
                   // Board
-                  const Expanded(
+                  Expanded(
                     child: Boxes(),
                   ),
 
@@ -124,7 +126,9 @@ class GameScreen extends StatelessWidget {
 }
 
 class Boxes extends StatelessWidget {
-  const Boxes({
+  final firestoreService = FirestoreService();
+
+  Boxes({
     super.key,
   });
 
@@ -132,15 +136,40 @@ class Boxes extends StatelessWidget {
   Widget build(BuildContext context) {
     final ticTacToe = context.watch<TicTacToe>();
 
-    return GridView.builder(
-        // shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
-        itemCount: ticTacToe.boardState.length,
-        itemBuilder: (BuildContext ctx, int i) {
-          return NumberBox(position: i);
-        });
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: firestoreService.getGameHistoryStream(ticTacToe.gameId!),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return FutureBuilder(
+            future: firestoreService.getAllGameMoves(ticTacToe.gameId!),
+            builder: (_, snapshot) {
+              if (snapshot.hasData) {
+                ticTacToe.updateBoardState(snapshot.data!);
+
+                return GridView.builder(
+                  // shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                  ),
+                  itemCount: ticTacToe.boardState.length,
+                  itemBuilder: (BuildContext ctx, int i) {
+                    return NumberBox(position: i);
+                  },
+                );
+              }
+
+              return const CircularProgressIndicator(
+                color: Color.fromARGB(255, 241, 197, 6),
+              );
+            },
+          );
+        } else {
+          return const CircularProgressIndicator(
+            color: Color.fromARGB(255, 241, 197, 6),
+          );
+        }
+      },
+    );
   }
 }

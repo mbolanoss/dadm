@@ -26,7 +26,7 @@ class StatusText extends StatelessWidget {
             )
           : const BoxDecoration(),
       child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        stream: firestoreService.getTurnStream(ticTacToe.gameId!),
+        stream: firestoreService.getGameInfoStream(ticTacToe.gameId!),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(
