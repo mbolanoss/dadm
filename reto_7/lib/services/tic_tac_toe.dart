@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:reto_3/models/game.dart';
+import 'package:reto_3/models/move.dart';
+import 'package:reto_3/services/firestore_service.dart';
 
 class TicTacToe with ChangeNotifier {
+  final firestoreService = FirestoreService();
   String? gameId;
+  String? player1Id;
+  String? player2Id;
+
   final boardState = List.filled(9, emptySpot);
   List<int> winnerPositions = List.filled(3, -1);
 
@@ -10,7 +16,6 @@ class TicTacToe with ChangeNotifier {
   static const player1 = 1;
   static const player2 = 2;
 
-  int currentTurn = player1;
   int winner = 0;
 
   int player1Wins = 0;
@@ -20,6 +25,8 @@ class TicTacToe with ChangeNotifier {
   void loadGame(Game game) {
     gameId = game.id;
     player1Wins = game.player1wins!;
+    player1Id = game.player1Id;
+    player2Id = game.player2Id;
     player2Wins = game.player2wins!;
     ties = game.ties!;
 
@@ -59,16 +66,25 @@ class TicTacToe with ChangeNotifier {
       winnerPositions[i] = -1;
     }
 
-    currentTurn = player1;
+    // Cambiar turno en Firebase
+    // currentTurn = player1;
+
     winner = 0;
     notifyListeners();
   }
 
   // true if location is available, false otherwise
-  void setMove(int location) {
+  void setMove(int location) async {
     if (boardState.any((position) => position == emptySpot)) {
       if (boardState[location] == emptySpot) {
-        boardState[location] = currentTurn;
+        final currentTurnPlayerId =
+            await firestoreService.getCurrentTurn(gameId!);
+
+        boardState[location] =
+            currentTurnPlayerId == player1Id ? player1 : player2;
+
+        final move = Move(playerId: currentTurnPlayerId, position: location);
+        firestoreService.sendMove(move, gameId!);
 
         notifyListeners();
       }
@@ -115,12 +131,18 @@ class TicTacToe with ChangeNotifier {
     setMove(location);
 
     // Update winner info
+    String currentTurn = await firestoreService.getCurrentTurn(gameId!);
     List<int> winnerStatus = checkWinner(boardState, currentTurn);
     winner = winnerStatus[0];
     winnerPositions = winnerStatus.sublist(1, 4);
 
     // next turn
-    currentTurn = currentTurn == player1 ? player2 : player1;
+    currentTurn = currentTurn == player1Id! ? player2Id! : player1Id!;
+    firestoreService.changeTurn(gameId!, currentTurn);
     notifyListeners();
+  }
+
+  Future<String> getCurrentTurn() async {
+    return firestoreService.getCurrentTurn(gameId!);
   }
 }

@@ -46,7 +46,7 @@ class GameScreen extends StatelessWidget {
                         margin: EdgeInsets.symmetric(
                           vertical: screenSize.height * 0.01,
                         ),
-                        child: const StatusText(),
+                        child: StatusText(),
                       ),
 
                       // Score
@@ -92,7 +92,7 @@ class GameScreen extends StatelessWidget {
                           margin: EdgeInsets.only(
                             bottom: screenSize.height * 0.02,
                           ),
-                          child: const StatusText(),
+                          child: StatusText(),
                         ),
                         // Score
                         Container(

@@ -8,7 +8,7 @@ class Game {
   int? player1wins;
   int? player2wins;
   int? ties;
-  int? turn;
+  String? turn;
 
   Game({
     required this.id,

@@ -38,8 +38,13 @@ class NumberBox extends StatelessWidget {
           child: ticTacToe.boardState[position] == 0
               ? const Text("")
               : ticTacToe.boardState[position] == 1
-                  ? Image.asset("assets/x.png")
-                  : Image.asset("assets/o.png"),
+                  ? const Text("1")
+                  : const Text("2"),
+          // ticTacToe.boardState[position] == 0
+          //     ? const Text("")
+          //     : ticTacToe.boardState[position] == 1
+          //         ? Image.asset("assets/x.png")
+          //         : Image.asset("assets/o.png"),
         ),
       ),
     );

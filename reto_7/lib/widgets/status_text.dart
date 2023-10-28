@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reto_3/services/firestore_service.dart';
 
 import '../services/tic_tac_toe.dart';
 
 class StatusText extends StatelessWidget {
-  const StatusText({
+  final firestoreService = FirestoreService();
+  StatusText({
     super.key,
   });
 
@@ -22,32 +25,41 @@ class StatusText extends StatelessWidget {
               ),
             )
           : const BoxDecoration(),
-      child: Text(
-        getText(ticTacToe.currentTurn, ticTacToe.winner),
-        style: TextStyle(
-          fontSize: 22,
-          color: ticTacToe.winner == 0 ? Colors.white : Colors.black,
-        ),
+      child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: firestoreService.getTurnStream(ticTacToe.gameId!),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Text(
+              getText(firestoreService.getCurrentTurnFromDoc(snapshot.data!),
+                  ticTacToe),
+              style: TextStyle(
+                fontSize: 22,
+                color: ticTacToe.winner == 0 ? Colors.white : Colors.black,
+              ),
+            );
+          }
+          return const CircularProgressIndicator(
+            color: Color.fromARGB(255, 241, 197, 6),
+          );
+        },
       ),
     );
   }
 
-  String getText(int currentTurn, int winner) {
-    switch (winner) {
-      case 0:
-        return currentTurn == TicTacToe.player1
-            ? 'Turno de: Jugador 1'
-            : 'Turno de: Jugador 2';
-      case 1:
-        return 'Gana Jugador 1 🎉';
-      case 2:
-        return 'Gana Jugador 2 🎉';
+  String getText(String currentTurn, TicTacToe ticTacToe) {
+    String text = '';
 
-      case 3:
-        return 'Empate 😒';
-
-      default:
-        return '';
+    if (currentTurn == ticTacToe.player1Id) {
+      text = 'Turno de: Jugador 1';
+    } else if (currentTurn == ticTacToe.player2Id) {
+      text = 'Turno de: Jugador 2';
+    } else if (currentTurn == 'win1') {
+      text = 'Gana Jugador 1 🎉';
+    } else if (currentTurn == 'win2') {
+      text = 'Gana Jugador 2 🎉';
+    } else if (currentTurn == 'tie') {
+      text = 'Empate 😒';
     }
+    return text;
   }
 }

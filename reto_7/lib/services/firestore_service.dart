@@ -72,9 +72,17 @@ class FirestoreService {
     });
   }
 
-  Future<void> getCurrentTurn(String gameId) async {
+  Future<String> getCurrentTurn(String gameId) async {
     final gameData = await _firestore.collection('matches').doc(gameId).get();
 
     return gameData.data()!['turn'];
+  }
+
+  String getCurrentTurnFromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    return doc.data()!['turn'];
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getTurnStream(String gameId) {
+    return _firestore.collection('matches').doc(gameId).snapshots();
   }
 }
