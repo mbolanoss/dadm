@@ -65,4 +65,16 @@ class FirestoreService {
   }
 
   Future<void> resetGame() async {}
+
+  Future<void> changeTurn(String gameId, String newTurn) async {
+    await _firestore.collection('matches').doc(gameId).update({
+      'turn': newTurn,
+    });
+  }
+
+  Future<void> getCurrentTurn(String gameId) async {
+    final gameData = await _firestore.collection('matches').doc(gameId).get();
+
+    return gameData.data()!['turn'];
+  }
 }
