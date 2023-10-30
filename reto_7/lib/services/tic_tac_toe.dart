@@ -183,8 +183,8 @@ class TicTacToe with ChangeNotifier {
     return deviceId == currentTurn;
   }
 
-  void updateWinner(int newWinner) {
-    winner == newWinner;
-    notifyListeners();
+  void updateWinner(List<int> winnerInfo) {
+    winner = winnerInfo[0];
+    winnerPositions = winnerInfo.sublist(1);
   }
 }

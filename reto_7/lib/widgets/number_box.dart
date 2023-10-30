@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reto_3/services/firestore_service.dart';
@@ -19,51 +20,67 @@ class NumberBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final ticTacToe = context.watch<TicTacToe>();
 
-    return GridTile(
-      child: Container(
-        decoration: BoxDecoration(border: getBorder(position)),
-        padding: const EdgeInsets.all(15),
-        child: TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: ticTacToe.winnerPositions.contains(position)
-                ? Colors.amber
-                : Colors.transparent,
-          ),
-          onPressed: ticTacToe.boardState[position] == TicTacToe.emptySpot &&
-                  ticTacToe.winner == 0 &&
-                  ticTacToe.isTurnAvailable()
-              ? () async {
-                  final player = AudioPlayer();
-                  player.play(AssetSource("player1.mp3"));
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: firestoreService.getGameHistoryStream(ticTacToe.gameId!),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            ticTacToe
+                .updateWinner(ticTacToe.checkWinner(ticTacToe.boardState, 2));
 
-                  ticTacToe.makeTurn(position);
-                }
-              : null,
-          child: ticTacToe.boardState[position] == 0
-              ? const Text("")
-              : ticTacToe.boardState[position] == 1
-                  ? const Text(
-                      "1",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    )
-                  : const Text(
-                      "2",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-          // ticTacToe.boardState[position] == 0
-          //     ? const Text("")
-          //     : ticTacToe.boardState[position] == 1
-          //         ? Image.asset("assets/x.png")
-          //         : Image.asset("assets/o.png"),
-        ),
-      ),
-    );
+            print('WINNER: ${ticTacToe.winner}');
+            return GridTile(
+              child: Container(
+                decoration: BoxDecoration(border: getBorder(position)),
+                padding: const EdgeInsets.all(15),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor:
+                        ticTacToe.winnerPositions.contains(position)
+                            ? Colors.amber
+                            : Colors.transparent,
+                  ),
+                  onPressed:
+                      ticTacToe.boardState[position] == TicTacToe.emptySpot &&
+                              ticTacToe.winner == 0 &&
+                              ticTacToe.isTurnAvailable()
+                          ? () async {
+                              final player = AudioPlayer();
+                              player.play(AssetSource("player1.mp3"));
+
+                              ticTacToe.makeTurn(position);
+                            }
+                          : null,
+                  child: ticTacToe.boardState[position] == 0
+                      ? const Text("")
+                      : ticTacToe.boardState[position] == 1
+                          ? const Text(
+                              "1",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                              ),
+                            )
+                          : const Text(
+                              "2",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                              ),
+                            ),
+                  // ticTacToe.boardState[position] == 0
+                  //     ? const Text("")
+                  //     : ticTacToe.boardState[position] == 1
+                  //         ? Image.asset("assets/x.png")
+                  //         : Image.asset("assets/o.png"),
+                ),
+              ),
+            );
+          } else {
+            return const CircularProgressIndicator(
+              color: Colors.blue,
+            );
+          }
+        });
   }
 
   BoxBorder getBorder(int position) {

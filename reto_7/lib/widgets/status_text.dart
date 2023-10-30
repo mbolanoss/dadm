@@ -15,36 +15,65 @@ class StatusText extends StatelessWidget {
   Widget build(BuildContext context) {
     final ticTacToe = context.watch<TicTacToe>();
 
-    // ticTacToe.updateWinner(ticTacToe.checkWinner(ticTacToe.boardState, 2)[0]);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: ticTacToe.winner != 0
-          ? const BoxDecoration(
-              color: Color.fromARGB(255, 0, 155, 255),
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: firestoreService.getGameInfoStream(ticTacToe.gameId!),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            decoration: ticTacToe.winner != 0
+                ? const BoxDecoration(
+                    color: Color.fromARGB(255, 0, 155, 255),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  )
+                : const BoxDecoration(),
+            child: Text(
+              getText(ticTacToe),
+              style: TextStyle(
+                fontSize: 22,
+                color: ticTacToe.winner == 0 ? Colors.white : Colors.black,
               ),
-            )
-          : const BoxDecoration(),
-      child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          stream: firestoreService.getGameInfoStream(ticTacToe.gameId!),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text(
-                getText(ticTacToe),
-                style: TextStyle(
-                  fontSize: 22,
-                  color: ticTacToe.winner == 0 ? Colors.white : Colors.black,
-                ),
-              );
-            } else {
-              return const CircularProgressIndicator(
-                color: Colors.blue,
-              );
-            }
-          }),
+            ),
+          );
+        } else {
+          return const CircularProgressIndicator(
+            color: Colors.blue,
+          );
+        }
+      },
     );
+
+    // return Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+    //   decoration: ticTacToe.winner != 0
+    //       ? const BoxDecoration(
+    //           color: Color.fromARGB(255, 0, 155, 255),
+    //           borderRadius: BorderRadius.all(
+    //             Radius.circular(20),
+    //           ),
+    //         )
+    //       : const BoxDecoration(),
+    //   child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+    //     stream: firestoreService.getGameInfoStream(ticTacToe.gameId!),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.hasData) {
+    //         return Text(
+    //           getText(ticTacToe),
+    //           style: TextStyle(
+    //             fontSize: 22,
+    //             color: ticTacToe.winner == 0 ? Colors.white : Colors.black,
+    //           ),
+    //         );
+    //       } else {
+    //         return const CircularProgressIndicator(
+    //           color: Colors.blue,
+    //         );
+    //       }
+    //     },
+    //   ),
+    // );
   }
 
   String getText(TicTacToe ticTacToe) {
