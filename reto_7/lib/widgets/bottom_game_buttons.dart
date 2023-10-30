@@ -69,7 +69,7 @@ class CloseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        SystemNavigator.pop();
+        Navigator.of(context).pushReplacementNamed('/');
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 241, 197, 6),

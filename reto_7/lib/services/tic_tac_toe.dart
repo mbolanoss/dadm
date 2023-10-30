@@ -106,7 +106,7 @@ class TicTacToe with ChangeNotifier {
   }
 
   // returns [winner, pos1, pos2, pos3]
-  List<int> checkWinner(state, turn) {
+  List<int> checkWinner(List<int> state, int turn) {
     // Check horizontal wins
     for (int i = 0; i <= 6; i += 3) {
       if (state[i] == turn && state[i + 1] == turn && state[i + 2] == turn) {
@@ -146,13 +146,24 @@ class TicTacToe with ChangeNotifier {
 
     // Update winner info
     String currentTurn = await firestoreService.getCurrentTurn(gameId!);
-    List<int> winnerStatus = checkWinner(boardState, currentTurn);
+    final currentTurnNumber = currentTurn == deviceId ? player1 : player2;
+
+    List<int> winnerStatus = checkWinner(boardState, currentTurnNumber);
     winner = winnerStatus[0];
     winnerPositions = winnerStatus.sublist(1, 4);
 
-    // next turn
-    currentTurn = currentTurn == player1Id! ? player2Id! : player1Id!;
-    firestoreService.changeTurn(gameId!, currentTurn);
+    if (winner != 0) {
+      final winnerStr = winner == player1
+          ? 'win1'
+          : winner == player2
+              ? 'win2'
+              : 'tie';
+      firestoreService.sendWinner(gameId!, winnerStr);
+    } else {
+      // next turn
+      currentTurn = currentTurn == player1Id! ? player2Id! : player1Id!;
+      firestoreService.changeTurn(gameId!, currentTurn);
+    }
     notifyListeners();
   }
 

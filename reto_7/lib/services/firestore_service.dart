@@ -104,4 +104,10 @@ class FirestoreService {
         .collection('history')
         .snapshots();
   }
+
+  Future<void> sendWinner(String gameId, String winner) async {
+    await _firestore.collection('matches').doc(gameId).update({
+      'turn': winner,
+    });
+  }
 }
