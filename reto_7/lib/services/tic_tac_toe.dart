@@ -4,6 +4,8 @@ import 'package:reto_3/models/move.dart';
 import 'package:reto_3/services/firestore_service.dart';
 
 class TicTacToe with ChangeNotifier {
+  late String deviceId;
+
   final firestoreService = FirestoreService();
   String? gameId;
   String? player1Id;
@@ -156,5 +158,9 @@ class TicTacToe with ChangeNotifier {
 
   Future<String> getCurrentTurn() async {
     return firestoreService.getCurrentTurn(gameId!);
+  }
+
+  bool isTurnAvailable(String currentTurn) {
+    return deviceId == currentTurn;
   }
 }

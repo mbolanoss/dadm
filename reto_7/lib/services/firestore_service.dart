@@ -35,6 +35,15 @@ class FirestoreService {
     return List.from(movesList.reversed);
   }
 
+  Future<Game> getGameStatus(String gameId) async {
+    final gameMoves = await getAllGameMoves(gameId);
+    final currentTurn = await getCurrentTurn(gameId);
+
+    final game = Game.status(history: gameMoves, turn: currentTurn);
+
+    return game;
+  }
+
   Future<void> sendMove(Move move, String gameId) async {
     final moveJson = move.toJSON();
 

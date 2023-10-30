@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -13,11 +14,17 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  final deviceInfo = await DeviceInfoPlugin().androidInfo;
+  final deviceId = deviceInfo.id;
+
+  final ticTacToe = TicTacToe();
+  ticTacToe.deviceId = deviceId;
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => TicTacToe(),
+          create: (_) => ticTacToe,
         ),
       ],
       child: const MyApp(),

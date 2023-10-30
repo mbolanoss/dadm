@@ -21,6 +21,8 @@ class Game {
     required this.turn,
   });
 
+  Game.status({required this.history, required this.turn});
+
   Game.fromJSON(Map<String, dynamic> json) {
     player1Id = json['player1_id'];
     player2Id = json['player2_id'];

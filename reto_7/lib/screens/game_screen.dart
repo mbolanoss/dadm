@@ -138,13 +138,13 @@ class Boxes extends StatelessWidget {
 
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
       stream: firestoreService.getGameHistoryStream(ticTacToe.gameId!),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
+      builder: (context, streamSnapshot) {
+        if (streamSnapshot.hasData) {
           return FutureBuilder(
             future: firestoreService.getAllGameMoves(ticTacToe.gameId!),
-            builder: (_, snapshot) {
-              if (snapshot.hasData) {
-                ticTacToe.updateBoardState(snapshot.data!);
+            builder: (_, futureSnapshot) {
+              if (futureSnapshot.hasData) {
+                ticTacToe.updateBoardState(futureSnapshot.data!);
 
                 return GridView.builder(
                   // shrinkWrap: true,
