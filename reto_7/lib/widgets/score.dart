@@ -78,10 +78,10 @@ class ResetScoreButton extends StatelessWidget {
     final ticTacToe = context.watch<TicTacToe>();
 
     return ElevatedButton(
-      onPressed: () {
-        ticTacToe.resetScore();
+      onPressed: () async {
+        await firestoreService.resetScore(ticTacToe.gameId!);
 
-        firestoreService.resetScore(ticTacToe.gameId!);
+        ticTacToe.resetScore();
       },
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),

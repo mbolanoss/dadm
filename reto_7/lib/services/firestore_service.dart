@@ -45,12 +45,18 @@ class FirestoreService {
         .add(moveJson);
   }
 
-  Future<void> saveGame(Game game) async {
-    await _firestore.collection('matches').doc(game.id).update({
-      'player1_wins': game.player1wins,
-      'player2_wins': game.player2wins,
-      'ties': game.ties,
-      'turn': game.turn
+  Future<void> updateScore({
+    required int player1Wins,
+    required int player2Wins,
+    required int ties,
+    required String turn,
+    required String gameId,
+  }) async {
+    await _firestore.collection('matches').doc(gameId).update({
+      'player1_wins': player1Wins,
+      'player2_wins': player2Wins,
+      'ties': ties,
+      'turn': turn
     });
   }
 
@@ -64,7 +70,26 @@ class FirestoreService {
     });
   }
 
-  Future<void> resetGame() async {}
+  Future<void> resetGame(String turn, String gameId) async {
+    // Reiniciar tablero
+    final movesCollection = await _firestore
+        .collection('matches')
+        .doc(gameId)
+        .collection('history')
+        .get();
+
+    for (var doc in movesCollection.docs) {
+      _firestore
+          .collection('matches')
+          .doc(gameId)
+          .collection('history')
+          .doc(doc.id)
+          .delete();
+    }
+
+    // Reiniciar turno
+    await _firestore.collection('matches').doc(gameId).update({'turn': turn});
+  }
 
   Future<void> changeTurn(String gameId, String newTurn) async {
     await _firestore.collection('matches').doc(gameId).update({

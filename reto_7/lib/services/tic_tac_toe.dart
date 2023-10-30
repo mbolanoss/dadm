@@ -72,7 +72,7 @@ class TicTacToe with ChangeNotifier {
     currentTurn = game.turn!;
   }
 
-  void saveScore() {
+  void updateScore() {
     player1Wins = winner == 1 ? player1Wins + 1 : player1Wins;
     player2Wins = winner == 2 ? player2Wins + 1 : player2Wins;
     ties = winner == 3 ? ties + 1 : ties;
@@ -96,9 +96,6 @@ class TicTacToe with ChangeNotifier {
     for (int i = 0; i < winnerPositions.length; i++) {
       winnerPositions[i] = -1;
     }
-
-    // Cambiar turno en Firebase
-    // currentTurn = player1;
 
     winner = 0;
     notifyListeners();

@@ -16,7 +16,7 @@ class BottomGameButtons extends StatelessWidget {
       alignment: WrapAlignment.center,
       spacing: 15,
       children: [
-        CloseButton(),
+        const CloseButton(),
         NewGameButton(),
       ],
     );
@@ -34,11 +34,19 @@ class NewGameButton extends StatelessWidget {
     final ticTacToe = context.watch<TicTacToe>();
 
     return ElevatedButton(
-      onPressed: () {
-        ticTacToe.saveScore();
-        ticTacToe.resetGame();
+      onPressed: () async {
+        await firestoreService.updateScore(
+            player1Wins: ticTacToe.player1Wins,
+            player2Wins: ticTacToe.player2Wins,
+            ties: ticTacToe.ties,
+            turn: ticTacToe.currentTurn,
+            gameId: ticTacToe.gameId!);
 
-        firestoreService.resetGame();
+        await firestoreService.resetGame(
+            ticTacToe.player1Id!, ticTacToe.gameId!);
+
+        ticTacToe.updateScore();
+        ticTacToe.resetGame();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 241, 197, 6),
