@@ -15,6 +15,8 @@ class StatusText extends StatelessWidget {
   Widget build(BuildContext context) {
     final ticTacToe = context.watch<TicTacToe>();
 
+    // ticTacToe.updateWinner(ticTacToe.checkWinner(ticTacToe.boardState, 2)[0]);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: ticTacToe.winner != 0
@@ -26,27 +28,27 @@ class StatusText extends StatelessWidget {
             )
           : const BoxDecoration(),
       child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        stream: firestoreService.getGameInfoStream(ticTacToe.gameId!),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Text(
-              getText(firestoreService.getCurrentTurnFromDoc(snapshot.data!),
-                  ticTacToe),
-              style: TextStyle(
-                fontSize: 22,
-                color: ticTacToe.winner == 0 ? Colors.white : Colors.black,
-              ),
-            );
-          }
-          return const CircularProgressIndicator(
-            color: Color.fromARGB(255, 241, 197, 6),
-          );
-        },
-      ),
+          stream: firestoreService.getGameInfoStream(ticTacToe.gameId!),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(
+                getText(ticTacToe),
+                style: TextStyle(
+                  fontSize: 22,
+                  color: ticTacToe.winner == 0 ? Colors.white : Colors.black,
+                ),
+              );
+            } else {
+              return const CircularProgressIndicator(
+                color: Colors.blue,
+              );
+            }
+          }),
     );
   }
 
-  String getText(String currentTurn, TicTacToe ticTacToe) {
+  String getText(TicTacToe ticTacToe) {
+    String currentTurn = ticTacToe.currentTurn;
     String text = '';
 
     if (currentTurn == ticTacToe.player1Id) {

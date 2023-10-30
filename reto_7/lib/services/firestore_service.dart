@@ -35,15 +35,6 @@ class FirestoreService {
     return List.from(movesList.reversed);
   }
 
-  Future<Game> getGameStatus(String gameId) async {
-    final gameMoves = await getAllGameMoves(gameId);
-    final currentTurn = await getCurrentTurn(gameId);
-
-    final game = Game.status(history: gameMoves, turn: currentTurn);
-
-    return game;
-  }
-
   Future<void> sendMove(Move move, String gameId) async {
     final moveJson = move.toJSON();
 
@@ -81,16 +72,6 @@ class FirestoreService {
     });
   }
 
-  Future<String> getCurrentTurn(String gameId) async {
-    final gameData = await _firestore.collection('matches').doc(gameId).get();
-
-    return gameData.data()!['turn'];
-  }
-
-  String getCurrentTurnFromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    return doc.data()!['turn'];
-  }
-
   Stream<DocumentSnapshot<Map<String, dynamic>>> getGameInfoStream(
       String gameId) {
     return _firestore.collection('matches').doc(gameId).snapshots();
@@ -109,5 +90,32 @@ class FirestoreService {
     await _firestore.collection('matches').doc(gameId).update({
       'turn': winner,
     });
+  }
+
+  List<Move> getMovesListFromDoc(QuerySnapshot<Map<String, dynamic>> snapshot) {
+    final movesList = List<Move>.empty(growable: true);
+    for (final doc in snapshot.docs) {
+      final newMove = Move(
+          playerId: doc.data()['player_id'], position: doc.data()['position']);
+      movesList.add(newMove);
+    }
+
+    return movesList;
+  }
+
+  Game getGameStatus(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final doc = snapshot.data();
+    final player1wins = doc!['player1_wins'];
+    final player2wins = doc['player2_wins'];
+    final ties = doc['ties'];
+    final turn = doc['turn'];
+
+    final gameStatus = Game.status(
+        player1wins: player1wins,
+        player2wins: player2wins,
+        ties: ties,
+        turn: turn);
+
+    return gameStatus;
   }
 }

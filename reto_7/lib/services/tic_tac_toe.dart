@@ -24,6 +24,8 @@ class TicTacToe with ChangeNotifier {
   int player2Wins = 0;
   int ties = 0;
 
+  String currentTurn = '';
+
   void loadGame(Game game) {
     gameId = game.id;
     player1Wins = game.player1wins!;
@@ -31,6 +33,7 @@ class TicTacToe with ChangeNotifier {
     player2Id = game.player2Id;
     player2Wins = game.player2wins!;
     ties = game.ties!;
+    currentTurn = game.turn!;
 
     for (final move in game.history!) {
       if (move.playerId! == game.player1Id) {
@@ -51,8 +54,22 @@ class TicTacToe with ChangeNotifier {
         boardState[move.position!] = player2;
       }
     }
+  }
 
-    // notifyListeners();
+  void updateGameStatus(Game game) {
+    winner = game.turn == 'win1'
+        ? player1
+        : game.turn == 'win2'
+            ? 2
+            : game.turn == 'tie'
+                ? 3
+                : 0;
+
+    player1Wins = game.player1wins!;
+    player2Wins = game.player2wins!;
+    ties = game.ties!;
+
+    currentTurn = game.turn!;
   }
 
   void saveScore() {
@@ -88,16 +105,12 @@ class TicTacToe with ChangeNotifier {
   }
 
   // true if location is available, false otherwise
-  void setMove(int location) async {
+  void setMove(int location) {
     if (boardState.any((position) => position == emptySpot)) {
       if (boardState[location] == emptySpot) {
-        final currentTurnPlayerId =
-            await firestoreService.getCurrentTurn(gameId!);
+        boardState[location] = currentTurn == player1Id ? player1 : player2;
 
-        boardState[location] =
-            currentTurnPlayerId == player1Id ? player1 : player2;
-
-        final move = Move(playerId: currentTurnPlayerId, position: location);
+        final move = Move(playerId: currentTurn, position: location);
         firestoreService.sendMove(move, gameId!);
 
         notifyListeners();
@@ -145,7 +158,6 @@ class TicTacToe with ChangeNotifier {
     setMove(location);
 
     // Update winner info
-    String currentTurn = await firestoreService.getCurrentTurn(gameId!);
     final currentTurnNumber = currentTurn == deviceId ? player1 : player2;
 
     List<int> winnerStatus = checkWinner(boardState, currentTurnNumber);
@@ -158,20 +170,21 @@ class TicTacToe with ChangeNotifier {
           : winner == player2
               ? 'win2'
               : 'tie';
-      firestoreService.sendWinner(gameId!, winnerStr);
+      await firestoreService.sendWinner(gameId!, winnerStr);
     } else {
       // next turn
       currentTurn = currentTurn == player1Id! ? player2Id! : player1Id!;
-      firestoreService.changeTurn(gameId!, currentTurn);
+      await firestoreService.changeTurn(gameId!, currentTurn);
     }
     notifyListeners();
   }
 
-  Future<String> getCurrentTurn() async {
-    return firestoreService.getCurrentTurn(gameId!);
+  bool isTurnAvailable() {
+    return deviceId == currentTurn;
   }
 
-  bool isTurnAvailable(String currentTurn) {
-    return deviceId == currentTurn;
+  void updateWinner(int newWinner) {
+    winner == newWinner;
+    notifyListeners();
   }
 }
