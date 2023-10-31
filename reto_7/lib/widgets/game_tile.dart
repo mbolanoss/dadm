@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reto_3/models/game.dart';
+import 'package:reto_3/services/firestore_service.dart';
 import 'package:reto_3/services/tic_tac_toe.dart';
 
 class GameTile extends StatelessWidget {
   final Game game;
   final int gameNumber;
-  const GameTile({super.key, required this.game, required this.gameNumber});
+  final firestoreService = FirestoreService();
+  GameTile({super.key, required this.game, required this.gameNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +52,10 @@ class GameTile extends StatelessWidget {
           const SizedBox(height: 15),
           // Play button
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              await firestoreService.updatePlayer2Id(game);
               ticTacToe.loadGame(game);
+
               Navigator.pushNamed(context, '/game');
             },
             style: ElevatedButton.styleFrom(
