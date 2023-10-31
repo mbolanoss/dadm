@@ -163,4 +163,15 @@ class FirestoreService {
 
     await _firestore.collection('matches').add(newGame.toJson());
   }
+
+  Future<void> updatePlayer2Id(Game game) async {
+    final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    final deviceId = deviceInfo.id;
+
+    if (game.player1Id! != deviceId) {
+      await _firestore.collection('matches').doc(game.id!).update({
+        'player2_id': deviceId,
+      });
+    }
+  }
 }
