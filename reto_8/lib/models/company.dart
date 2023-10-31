@@ -15,13 +15,22 @@ String companyEnumToString(CompanyType type) {
           : 'Fábrica de software';
 }
 
+CompanyType stringToCompanyEnum(String type) {
+  return type == 'Consultoría'
+      ? CompanyType.consultory
+      : type == 'Desarrollo a la medida'
+          ? CompanyType.dev
+          : CompanyType.factory;
+}
+
 class Company {
-  String name;
-  String url;
-  int phoneNumber;
-  String email;
-  String services;
-  CompanyType type;
+  int? id;
+  late String name;
+  late String url;
+  late int phoneNumber;
+  late String email;
+  late String services;
+  late CompanyType type;
 
   Company({
     required this.name,
@@ -32,6 +41,16 @@ class Company {
     required this.type,
   });
 
+  Company.fromMap(Map<String, Object?> map) {
+    name = map['name'] as String;
+    url = map['url'] as String;
+    phoneNumber = map['phoneNumber'] as int;
+    email = map['email'] as String;
+    services = map['services'] as String;
+    type = stringToCompanyEnum(map['type'] as String);
+    id = map['id'] as int;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -41,5 +60,19 @@ class Company {
       'services': services,
       'type': companyEnumToString(type),
     };
+  }
+
+  @override
+  String toString() {
+    return '''
+    -----------------------
+    Nombre = $name
+    Url = $url
+    Tel = $phoneNumber
+    Email = $email
+    Servicios = $services
+    Tipo = ${companyEnumToString(type)}
+    -----------------------
+''';
   }
 }
