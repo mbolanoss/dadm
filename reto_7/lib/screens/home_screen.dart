@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:reto_3/services/firestore_service.dart';
 import 'package:reto_3/widgets/game_tile.dart';
@@ -20,11 +21,11 @@ class HomeScreen extends StatelessWidget {
             vertical: 30,
           ),
           child: Center(
-            child: FutureBuilder(
-              future: firestoreService.getAllGames(),
+            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: firestoreService.getGamesListStream(),
               builder: (_, snapshot) {
                 if (snapshot.hasData) {
-                  return HomeBody(snapshot: snapshot);
+                  return HomeBody(snapshot: snapshot.data!);
                 } else if (snapshot.hasError) {
                   return const Text('Error cargando las partidas');
                 } else {
@@ -42,9 +43,10 @@ class HomeScreen extends StatelessWidget {
 }
 
 class HomeBody extends StatelessWidget {
-  final AsyncSnapshot<List<Game>> snapshot;
+  final QuerySnapshot<Map<String, dynamic>> snapshot;
+  final firestoreService = FirestoreService();
 
-  const HomeBody({
+  HomeBody({
     super.key,
     required this.snapshot,
   });
@@ -55,13 +57,68 @@ class HomeBody extends StatelessWidget {
       children: [
         const Title(),
         const SizedBox(height: 20),
-        ListView.builder(
-          itemCount: snapshot.data!.length,
-          shrinkWrap: true,
-          itemBuilder: (_, index) {
-            return GameTile(
-                game: snapshot.data!.elementAt(index), gameNumber: index + 1);
+        snapshot.docs.isNotEmpty
+            ? FutureBuilder<List<Game>>(
+                future: firestoreService.getAllGames(snapshot),
+                builder: (context, futureSnapshot) {
+                  if (futureSnapshot.hasData) {
+                    return Expanded(
+                      child: ListView.separated(
+                        separatorBuilder: (_, __) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: const BoxDecoration(
+                              color: Colors.blueAccent,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            height: 3,
+                          );
+                        },
+                        itemCount: futureSnapshot.data!.length,
+                        shrinkWrap: true,
+                        itemBuilder: (_, index) {
+                          return GameTile(
+                              game: futureSnapshot.data!.elementAt(index),
+                              gameNumber: index + 1);
+                        },
+                      ),
+                    );
+                  } else {
+                    return const CircularProgressIndicator(
+                      color: Colors.blue,
+                    );
+                  }
+                },
+              )
+            : const Text(
+                'Ups! No hay partidas creadas',
+                style: TextStyle(fontSize: 28, color: Colors.white),
+              ),
+        const SizedBox(
+          height: 30,
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            firestoreService.createGame();
           },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 241, 197, 6),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+          ),
+          child: const Text(
+            'Crear partida',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );

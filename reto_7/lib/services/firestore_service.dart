@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:reto_3/models/game.dart';
 
 import '../models/move.dart';
@@ -6,10 +7,9 @@ import '../models/move.dart';
 class FirestoreService {
   final _firestore = FirebaseFirestore.instance;
 
-  Future<List<Game>> getAllGames() async {
+  Future<List<Game>> getAllGames(
+      QuerySnapshot<Map<String, dynamic>> gamesRaw) async {
     final gamesList = List<Game>.empty(growable: true);
-
-    final gamesRaw = await _firestore.collection('matches').get();
 
     for (final game in gamesRaw.docs) {
       final newGame = Game.fromJSON(game.data());
@@ -102,6 +102,10 @@ class FirestoreService {
     return _firestore.collection('matches').doc(gameId).snapshots();
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> getGamesListStream() {
+    return _firestore.collection('matches').snapshots();
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>> getGameHistoryStream(
       String gameId) {
     return _firestore
@@ -142,5 +146,21 @@ class FirestoreService {
         turn: turn);
 
     return gameStatus;
+  }
+
+  void createGame() async {
+    final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    final deviceId = deviceInfo.id;
+
+    Game newGame = Game(
+      player1Id: deviceId,
+      player2Id: '',
+      player1wins: 0,
+      player2wins: 0,
+      ties: 0,
+      turn: deviceId,
+    );
+
+    await _firestore.collection('matches').add(newGame.toJson());
   }
 }

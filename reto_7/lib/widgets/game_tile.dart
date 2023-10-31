@@ -39,7 +39,9 @@ class GameTile extends StatelessWidget {
           const SizedBox(height: 10),
 
           Text(
-            'Turno: J${game.turn}',
+            ticTacToe.deviceId == game.turn!
+                ? 'Turno: Jugador 1'
+                : 'Turno: Jugador 2',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 20,

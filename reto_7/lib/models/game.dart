@@ -11,14 +11,14 @@ class Game {
   String? turn;
 
   Game({
-    required this.id,
-    required this.player1Id,
-    required this.player2Id,
-    required this.history,
-    required this.player1wins,
-    required this.player2wins,
-    required this.ties,
-    required this.turn,
+    this.id,
+    this.player1Id,
+    this.player2Id,
+    this.history,
+    this.player1wins,
+    this.player2wins,
+    this.ties,
+    this.turn,
   });
 
   Game.status({
