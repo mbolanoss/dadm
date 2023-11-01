@@ -33,7 +33,12 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (_, __) {
+                    return const SizedBox(
+                      height: 40,
+                    );
+                  },
                   shrinkWrap: true,
                   itemCount: companyProvider.getCompaniesListLength(),
                   itemBuilder: (_, index) {
@@ -42,20 +47,30 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  await companyProvider.addCompany(
-                    Company(
-                        name: 'CompanyTest',
-                        url: 'Url test',
-                        phoneNumber: 111222333,
-                        email: 'email test',
-                        services: 'services test',
-                        type: CompanyType.dev),
-                  );
-                },
-                child: const Text('Insert'),
-              ),
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     await companyProvider.addCompany(
+              //       Company(
+              //           name: 'CompanyTest',
+              //           url: 'Url test',
+              //           phoneNumber: 111222333,
+              //           email: 'email test',
+              //           services: 'services test',
+              //           type: CompanyType.dev),
+              //     );
+              //   },
+              //   child: const Text('Insert'),
+              // ),
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     final list = await companyProvider.getAllCompanies();
+
+              //     for (Company c in list) {
+              //       print(c.toString());
+              //     }
+              //   },
+              //   child: const Text('Fetch'),
+              // ),
             ],
           ),
         ),

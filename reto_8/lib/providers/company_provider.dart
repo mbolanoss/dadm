@@ -15,8 +15,9 @@ class CompanyProvider with ChangeNotifier {
   }
 
   Future<void> addCompany(Company company) async {
+    final id = await dbService.insertCompany(company);
+    company.id = id;
     companiesList.add(company);
-    await dbService.insertCompany(company);
     notifyListeners();
   }
 
@@ -33,5 +34,9 @@ class CompanyProvider with ChangeNotifier {
     await dbService.updateCompany(company);
 
     notifyListeners();
+  }
+
+  Future<List<Company>> getAllCompanies() async {
+    return dbService.getAllCompanies();
   }
 }

@@ -44,8 +44,8 @@ class DBService {
     );""");
   }
 
-  Future<void> insertCompany(Company company) async {
-    await _db!.insert(
+  Future<int> insertCompany(Company company) async {
+    return await _db!.insert(
       tableName,
       company.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,

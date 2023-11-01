@@ -73,7 +73,7 @@ class CompanyCard extends StatelessWidget {
                     final confirmDelete = await showDialog<bool>(
                       barrierDismissible: false,
                       context: context,
-                      builder: (_) => ConfirmDeleteAlert(),
+                      builder: (_) => const ConfirmDeleteAlert(),
                     );
 
                     if (confirmDelete!) {
