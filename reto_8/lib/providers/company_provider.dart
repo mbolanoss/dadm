@@ -43,7 +43,11 @@ class CompanyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<List<Company>> searchCompanies(String name, CompanyType? type){
+  Future<void> searchCompanies(String name, CompanyType? type) async {
+    final newList = await dbService.searchCompanies(
+        name, type != null ? companyEnumToString(type) : '');
+    companiesList = newList;
 
-  // }
+    notifyListeners();
+  }
 }

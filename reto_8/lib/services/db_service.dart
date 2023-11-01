@@ -79,4 +79,33 @@ class DBService {
       ),
     );
   }
+
+  Future<List<Company>> searchCompanies(String name, String type) async {
+    String whereQuery = '';
+    List<String> whereArgs = [];
+
+    if (name != '' && type != '') {
+      whereQuery = 'name = ? AND type = ?';
+      whereArgs = [name, type];
+    } else if (name != '' && type == '') {
+      whereQuery = 'name = ?';
+      whereArgs = [name];
+    } else if (name == '' && type != '') {
+      whereQuery = 'type = ?';
+      whereArgs = [type];
+    }
+
+    final rawList = await _db!.query(
+      tableName,
+      where: whereQuery,
+      whereArgs: whereArgs,
+    );
+
+    return List.generate(
+      rawList.length,
+      (index) => Company.fromMap(
+        rawList[index],
+      ),
+    );
+  }
 }

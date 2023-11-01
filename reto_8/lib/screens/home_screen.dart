@@ -102,51 +102,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class SearchButtons extends StatelessWidget {
-  const SearchButtons({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final companyProvider = context.watch<CompanyProvider>();
-
-    final buttonTheme = Theme.of(context).elevatedButtonTheme;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        IconButton(
-          style: buttonTheme.style!,
-          onPressed: () async {
-            showModalBottomSheet<void>(
-              isScrollControlled: true,
-              context: context,
-              builder: (_) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SearchBottomSheet(),
-                );
-              },
-            );
-          },
-          icon: const Icon(Icons.search_rounded),
-          iconSize: 35,
-        ),
-        IconButton(
-          style: buttonTheme.style!,
-          onPressed: () async {
-            await companyProvider.fetchAllCompanies();
-          },
-          icon: const Icon(Icons.close_rounded),
-          iconSize: 35,
-        ),
-      ],
-    );
-  }
-}
-
 // ignore: must_be_immutable
 class SearchBottomSheet extends StatelessWidget {
   final nameFieldController = TextEditingController();
@@ -158,6 +113,9 @@ class SearchBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final companyProvider = context.watch<CompanyProvider>();
+
+    final buttonTheme = Theme.of(context).elevatedButtonTheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -198,7 +156,30 @@ class SearchBottomSheet extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        SearchButtons(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              style: buttonTheme.style!,
+              onPressed: () async {
+                await companyProvider.searchCompanies(
+                  nameFieldController.text,
+                  companyType,
+                );
+              },
+              icon: const Icon(Icons.search_rounded),
+              iconSize: 35,
+            ),
+            IconButton(
+              style: buttonTheme.style!,
+              onPressed: () async {
+                await companyProvider.fetchAllCompanies();
+              },
+              icon: const Icon(Icons.close_rounded),
+              iconSize: 35,
+            ),
+          ],
+        ),
       ],
     );
   }
