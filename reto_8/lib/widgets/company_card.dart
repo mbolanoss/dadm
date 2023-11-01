@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reto_8/screens/handle_company.dart';
 import 'package:reto_8/utils/custom_theme.dart';
 
 import '../models/company.dart';
@@ -92,7 +93,15 @@ class CompanyCard extends StatelessWidget {
                 ),
                 // Edit btn
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return HandleCompany(currentCompany: company);
+                        },
+                      ),
+                    );
+                  },
                   style: buttonTheme.style!.copyWith(
                     backgroundColor: MaterialStateProperty.all(yellow),
                   ),

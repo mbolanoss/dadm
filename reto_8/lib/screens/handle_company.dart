@@ -5,8 +5,11 @@ import 'package:reto_8/models/company.dart';
 import '../providers/company_provider.dart';
 import '../utils/custom_theme.dart';
 
-class CreateCompany extends StatelessWidget {
-  const CreateCompany({super.key});
+// ignore: must_be_immutable
+class HandleCompany extends StatelessWidget {
+  Company? currentCompany;
+
+  HandleCompany({super.key, this.currentCompany});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class CreateCompany extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  HandleCompanyForm(),
+                  HandleCompanyForm(currentCompany: currentCompany),
                 ],
               ),
             ),
@@ -42,16 +45,19 @@ class CreateCompany extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class HandleCompanyForm extends StatelessWidget {
+  Company? currentCompany;
   final formKey = GlobalKey<FormState>();
-  static final nameFieldController = TextEditingController();
-  static final urlFieldController = TextEditingController();
-  static final phoneFieldController = TextEditingController();
-  static final emailFieldController = TextEditingController();
-  static final servicesFieldController = TextEditingController();
+  final nameFieldController = TextEditingController();
+  final urlFieldController = TextEditingController();
+  final phoneFieldController = TextEditingController();
+  final emailFieldController = TextEditingController();
+  final servicesFieldController = TextEditingController();
 
   HandleCompanyForm({
     super.key,
+    this.currentCompany,
   });
 
   void clearForm() {
@@ -63,6 +69,14 @@ class HandleCompanyForm extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final buttonTheme = Theme.of(context).elevatedButtonTheme;
     final companyProvider = context.watch<CompanyProvider>();
+
+    if (currentCompany != null) {
+      nameFieldController.text = currentCompany!.name;
+      urlFieldController.text = currentCompany!.url;
+      phoneFieldController.text = currentCompany!.phoneNumber.toString();
+      emailFieldController.text = currentCompany!.email;
+      servicesFieldController.text = currentCompany!.services;
+    }
 
     return Form(
       key: formKey,
@@ -137,7 +151,18 @@ class HandleCompanyForm extends StatelessWidget {
                   type: CompanyType.consultory,
                 );
 
-                await companyProvider.addCompany(newCompany);
+                if (currentCompany == null) {
+                  await companyProvider.addCompany(newCompany);
+                } else {
+                  currentCompany!.name = nameFieldController.text;
+                  currentCompany!.url = urlFieldController.text;
+                  currentCompany!.phoneNumber =
+                      int.parse(phoneFieldController.text);
+                  currentCompany!.email = emailFieldController.text;
+                  currentCompany!.services = servicesFieldController.text;
+                  currentCompany!.type = CompanyType.factory;
+                  await companyProvider.updateCompany(currentCompany!);
+                }
 
                 // ignore: use_build_context_synchronously
                 showDialog(
@@ -146,7 +171,9 @@ class HandleCompanyForm extends StatelessWidget {
                   builder: (_) {
                     return AlertDialog(
                       title: Text(
-                        'Empresa creada correctamente',
+                        currentCompany == null
+                            ? 'Empresa creada correctamente'
+                            : 'Empresa actualizada correctamente',
                         style: textTheme.displaySmall,
                         textAlign: TextAlign.center,
                       ),
@@ -168,7 +195,7 @@ class HandleCompanyForm extends StatelessWidget {
               }
             },
             child: Text(
-              'Crear',
+              currentCompany == null ? 'Crear' : 'Actualizar',
               style: textTheme.labelLarge!.copyWith(
                 color: Colors.black,
               ),
