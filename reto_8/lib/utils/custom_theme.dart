@@ -29,6 +29,7 @@ ThemeData lightTheme = ThemeData(
           borderRadius: BorderRadius.circular(15),
         ),
       ),
+      elevation: MaterialStateProperty.all(5),
       backgroundColor: MaterialStateProperty.all(yellow),
     ),
   ),
