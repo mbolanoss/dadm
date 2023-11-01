@@ -4,8 +4,6 @@ import 'package:reto_8/providers/company_provider.dart';
 import 'package:reto_8/utils/custom_theme.dart';
 import 'package:reto_8/widgets/company_card.dart';
 
-import '../models/company.dart';
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 

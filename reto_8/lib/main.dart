@@ -13,8 +13,8 @@ void main() async {
   await dbService.database;
 
   final companyProvider = CompanyProvider();
-  companyProvider.companiesList = await dbService.getAllCompanies();
   companyProvider.dbService = dbService;
+  await companyProvider.fetchAllCompanies();
 
   runApp(
     MultiProvider(

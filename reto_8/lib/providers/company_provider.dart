@@ -36,7 +36,10 @@ class CompanyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Company>> getAllCompanies() async {
-    return dbService.getAllCompanies();
+  Future<void> fetchAllCompanies() async {
+    final newList = await dbService.getAllCompanies();
+    companiesList = newList;
+
+    notifyListeners();
   }
 }

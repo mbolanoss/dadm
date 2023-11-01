@@ -233,6 +233,7 @@ class HandleCompanyForm extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CompanyTypeDropdown extends StatelessWidget {
   final void Function(CompanyType) changeFormValue;
   CompanyType? preSelectedType;
