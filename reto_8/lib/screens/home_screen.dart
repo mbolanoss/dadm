@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reto_8/providers/company_provider.dart';
-import 'package:reto_8/services/db_service.dart';
 import 'package:reto_8/widgets/company_card.dart';
 
 import '../models/company.dart';
@@ -47,30 +46,30 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
               ),
-              // ElevatedButton(
-              //   onPressed: () async {
-              //     await companyProvider.addCompany(
-              //       Company(
-              //           name: 'CompanyTest',
-              //           url: 'Url test',
-              //           phoneNumber: 111222333,
-              //           email: 'email test',
-              //           services: 'services test',
-              //           type: CompanyType.dev),
-              //     );
-              //   },
-              //   child: const Text('Insert'),
-              // ),
-              // ElevatedButton(
-              //   onPressed: () async {
-              //     final list = await companyProvider.getAllCompanies();
+              ElevatedButton(
+                onPressed: () async {
+                  await companyProvider.addCompany(
+                    Company(
+                        name: 'CompanyTest',
+                        url: 'Url test',
+                        phoneNumber: 111222333,
+                        email: 'email test',
+                        services: 'services test',
+                        type: CompanyType.dev),
+                  );
+                },
+                child: const Text('Insert'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final list = await companyProvider.getAllCompanies();
 
-              //     for (Company c in list) {
-              //       print(c.toString());
-              //     }
-              //   },
-              //   child: const Text('Fetch'),
-              // ),
+                  for (Company c in list) {
+                    print(c.toString());
+                  }
+                },
+                child: const Text('Fetch'),
+              ),
             ],
           ),
         ),
@@ -80,7 +79,9 @@ class HomeScreen extends StatelessWidget {
             right: 20,
           ),
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/handleCompany');
+            },
             child: const Icon(
               Icons.add,
             ),
