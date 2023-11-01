@@ -39,7 +39,7 @@ ThemeData lightTheme = ThemeData(
     // Titulo
     displayLarge: GoogleFonts.nunito(
       fontWeight: FontWeight.bold,
-      fontSize: 42,
+      fontSize: 36,
     ),
     // Subtitulo
     displayMedium: GoogleFonts.nunito(

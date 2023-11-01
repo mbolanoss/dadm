@@ -42,4 +42,8 @@ class CompanyProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  // Future<List<Company>> searchCompanies(String name, CompanyType? type){
+
+  // }
 }
