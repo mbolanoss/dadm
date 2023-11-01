@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const cream = Color(0xFFDAF0EE);
-const green = Color(0xFF2BA84A);
-const seablue = Color(0xFF086375);
-const transSeablue = Color(0x99086375);
-const red = Color(0xFFF03A47);
-const purple = Color(0xFF52154E);
+const lavender = Color(0xFFeeeeff);
+const blue = Color(0xFF706993);
+const red = Color(0xFFDB3A34);
+const purple = Color(0xFF331e38);
+const yellow = Color(0xFFFFC857);
 
 ThemeData lightTheme = ThemeData(
   useMaterial3: true,
 
   colorScheme: const ColorScheme.light().copyWith(
-    background: cream,
+    background: lavender,
   ),
 
   // Botones flotantes
@@ -30,7 +29,7 @@ ThemeData lightTheme = ThemeData(
           borderRadius: BorderRadius.circular(15),
         ),
       ),
-      backgroundColor: MaterialStateProperty.all(green),
+      backgroundColor: MaterialStateProperty.all(yellow),
     ),
   ),
 
@@ -39,7 +38,7 @@ ThemeData lightTheme = ThemeData(
     // Titulo
     displayLarge: GoogleFonts.nunito(
       fontWeight: FontWeight.bold,
-      fontSize: 60,
+      fontSize: 42,
     ),
     // Subtitulo
     displayMedium: GoogleFonts.nunito(
@@ -55,7 +54,7 @@ ThemeData lightTheme = ThemeData(
     labelLarge: GoogleFonts.nunito(
       fontWeight: FontWeight.bold,
       color: Colors.white,
-      fontSize: 32,
+      fontSize: 26,
     ),
     // Text inputs
     bodyLarge: GoogleFonts.nunito(
@@ -68,7 +67,7 @@ ThemeData lightTheme = ThemeData(
   // Text inputs
   inputDecorationTheme: const InputDecorationTheme(
     hintStyle: TextStyle(
-      color: seablue,
+      color: blue,
       fontSize: 22,
       fontWeight: FontWeight.w600,
     ),
@@ -79,13 +78,13 @@ ThemeData lightTheme = ThemeData(
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         width: 3,
-        color: seablue,
+        color: blue,
       ),
     ),
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         width: 3,
-        color: green,
+        color: yellow,
       ),
     ),
     errorBorder: UnderlineInputBorder(

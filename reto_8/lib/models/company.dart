@@ -66,6 +66,7 @@ class Company {
   String toString() {
     return '''
     -----------------------
+    ID = $id
     Nombre = $name
     Url = $url
     Tel = $phoneNumber

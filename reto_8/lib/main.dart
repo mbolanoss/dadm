@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reto_8/providers/company_provider.dart';
 import 'package:reto_8/services/db_service.dart';
 import 'package:reto_8/utils/custom_theme.dart';
-import 'package:reto_8/widgets/home_screen.dart';
+import 'package:reto_8/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final dbService = DBService();
   await dbService.database;
+
+  final companyProvider = CompanyProvider();
+  companyProvider.companiesList = await dbService.getAllCompanies();
 
   runApp(
     MultiProvider(
@@ -17,6 +21,7 @@ void main() async {
           create: (_) => dbService,
           lazy: false,
         ),
+        ChangeNotifierProvider(create: (_) => companyProvider),
       ],
       child: const MyApp(),
     ),
