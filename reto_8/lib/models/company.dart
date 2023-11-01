@@ -53,6 +53,7 @@ class Company {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'url': url,
       'phoneNumber': phoneNumber,

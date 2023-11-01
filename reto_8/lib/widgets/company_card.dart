@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reto_8/utils/custom_theme.dart';
 
 import '../models/company.dart';
+import '../providers/company_provider.dart';
 
 class CompanyCard extends StatelessWidget {
   final Company company;
@@ -15,6 +17,7 @@ class CompanyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final buttonTheme = Theme.of(context).elevatedButtonTheme;
+    final companyProvider = context.watch<CompanyProvider>();
 
     return Material(
       elevation: 7,
@@ -64,18 +67,30 @@ class CompanyCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                // Delete btn
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final confirmDelete = await showDialog<bool>(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (_) => ConfirmDeleteAlert(),
+                    );
+
+                    if (confirmDelete!) {
+                      companyProvider.deleteCompany(company);
+                    }
+                  },
                   style: buttonTheme.style!.copyWith(
                       backgroundColor: MaterialStateProperty.all(red)),
                   child: Container(
-                    margin: EdgeInsets.all(4),
+                    margin: const EdgeInsets.all(4),
                     child: Text(
                       'Eliminar',
                       style: textTheme.labelLarge,
                     ),
                   ),
                 ),
+                // Edit btn
                 IconButton(
                   onPressed: () {},
                   style: buttonTheme.style!.copyWith(
@@ -90,6 +105,45 @@ class CompanyCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ConfirmDeleteAlert extends StatelessWidget {
+  const ConfirmDeleteAlert({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return AlertDialog(
+      title: Text(
+        '¿Estás seguro?',
+        style: textTheme.displaySmall,
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+          child: Text(
+            'No',
+            style: textTheme.displaySmall,
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+          child: Text(
+            'Si',
+            style: textTheme.displaySmall,
+          ),
+        ),
+      ],
     );
   }
 }

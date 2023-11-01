@@ -45,10 +45,27 @@ class DBService {
   }
 
   Future<void> insertCompany(Company company) async {
-    _db!.insert(
+    await _db!.insert(
       tableName,
       company.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> deleteCompany(Company company) async {
+    await _db!.delete(
+      tableName,
+      where: 'id = ?',
+      whereArgs: [company.id],
+    );
+  }
+
+  Future<void> updateCompany(Company company) async {
+    await _db!.update(
+      tableName,
+      company.toMap(),
+      where: 'id = ?',
+      whereArgs: [company.id],
     );
   }
 

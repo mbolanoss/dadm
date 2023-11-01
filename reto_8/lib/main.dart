@@ -13,14 +13,11 @@ void main() async {
 
   final companyProvider = CompanyProvider();
   companyProvider.companiesList = await dbService.getAllCompanies();
+  companyProvider.dbService = dbService;
 
   runApp(
     MultiProvider(
       providers: [
-        Provider<DBService>(
-          create: (_) => dbService,
-          lazy: false,
-        ),
         ChangeNotifierProvider(create: (_) => companyProvider),
       ],
       child: const MyApp(),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:reto_8/models/company.dart';
+import 'package:reto_8/services/db_service.dart';
 
 class CompanyProvider with ChangeNotifier {
-  List<Company> companiesList = List.empty(growable: false);
+  late DBService dbService;
+  List<Company> companiesList = <Company>[];
 
   Company getCompanyFromIndex(int index) {
     return companiesList[index];
@@ -12,19 +14,23 @@ class CompanyProvider with ChangeNotifier {
     return companiesList.length;
   }
 
-  void addCompanyToList(Company company) {
+  Future<void> addCompany(Company company) async {
     companiesList.add(company);
+    await dbService.insertCompany(company);
     notifyListeners();
   }
 
-  void removeCompanyFromList(Company company) {
+  Future<void> deleteCompany(Company company) async {
     companiesList.removeWhere((Company c) => c.id == company.id);
+    await dbService.deleteCompany(company);
     notifyListeners();
   }
 
-  void updateCompanyFromList(Company company) {
+  Future<void> updateCompany(Company company) async {
     final index = companiesList.indexWhere((Company c) => c.id == company.id);
     companiesList[index] = company;
+
+    await dbService.updateCompany(company);
 
     notifyListeners();
   }

@@ -4,12 +4,13 @@ import 'package:reto_8/providers/company_provider.dart';
 import 'package:reto_8/services/db_service.dart';
 import 'package:reto_8/widgets/company_card.dart';
 
+import '../models/company.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final dbService = context.read<DBService>();
     final textTheme = Theme.of(context).textTheme;
     final companyProvider = context.watch<CompanyProvider>();
 
@@ -40,7 +41,21 @@ class HomeScreen extends StatelessWidget {
                         company: companyProvider.companiesList[index]);
                   },
                 ),
-              )
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await companyProvider.addCompany(
+                    Company(
+                        name: 'CompanyTest',
+                        url: 'Url test',
+                        phoneNumber: 111222333,
+                        email: 'email test',
+                        services: 'services test',
+                        type: CompanyType.dev),
+                  );
+                },
+                child: const Text('Insert'),
+              ),
             ],
           ),
         ),
@@ -75,13 +90,14 @@ class HomeScreen extends StatelessWidget {
 //                 },
 //                 child: const Text('Insert'),
 //               ),
-//               ElevatedButton(
-//                 onPressed: () async {
-//                   final list = await dbService.getAllCompanies();
 
-//                   for (Company c in list) {
-//                     print(c.toString());
-//                   }
-//                 },
-//                 child: const Text('Fetch'),
-//               ),
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     final list = await dbService.getAllCompanies();
+
+              //     for (Company c in list) {
+              //       print(c.toString());
+              //     }
+              //   },
+              //   child: const Text('Fetch'),
+              // ),
