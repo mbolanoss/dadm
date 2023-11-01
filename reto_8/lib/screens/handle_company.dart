@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:reto_8/models/company.dart';
 
@@ -54,6 +55,7 @@ class HandleCompanyForm extends StatelessWidget {
   final phoneFieldController = TextEditingController();
   final emailFieldController = TextEditingController();
   final servicesFieldController = TextEditingController();
+  CompanyType? selectedCompanyType;
 
   HandleCompanyForm({
     super.key,
@@ -138,20 +140,24 @@ class HandleCompanyForm extends StatelessWidget {
               return null;
             },
           ),
+          CompanyTypeDropdown(
+            changeFormValue: (newType) => selectedCompanyType = newType,
+            preSelectedType:
+                currentCompany != null ? currentCompany!.type : null,
+          ),
           const SizedBox(height: 40),
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {
-                Company newCompany = Company(
-                  name: nameFieldController.text,
-                  url: urlFieldController.text,
-                  phoneNumber: int.parse(phoneFieldController.text),
-                  email: emailFieldController.text,
-                  services: servicesFieldController.text,
-                  type: CompanyType.consultory,
-                );
-
                 if (currentCompany == null) {
+                  Company newCompany = Company(
+                    name: nameFieldController.text,
+                    url: urlFieldController.text,
+                    phoneNumber: int.parse(phoneFieldController.text),
+                    email: emailFieldController.text,
+                    services: servicesFieldController.text,
+                    type: selectedCompanyType!,
+                  );
                   await companyProvider.addCompany(newCompany);
                 } else {
                   currentCompany!.name = nameFieldController.text;
@@ -160,7 +166,7 @@ class HandleCompanyForm extends StatelessWidget {
                       int.parse(phoneFieldController.text);
                   currentCompany!.email = emailFieldController.text;
                   currentCompany!.services = servicesFieldController.text;
-                  currentCompany!.type = CompanyType.factory;
+                  currentCompany!.type = selectedCompanyType!;
                   await companyProvider.updateCompany(currentCompany!);
                 }
 
@@ -223,6 +229,78 @@ class HandleCompanyForm extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CompanyTypeDropdown extends StatelessWidget {
+  final void Function(CompanyType) changeFormValue;
+  CompanyType? preSelectedType;
+
+  CompanyTypeDropdown({
+    super.key,
+    required this.changeFormValue,
+    this.preSelectedType,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Row(
+      children: [
+        const Icon(Icons.category, size: 35),
+        const SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          child: DropdownButtonFormField<CompanyType>(
+            value: preSelectedType,
+            validator: (type) {
+              if (type == null) {
+                return 'Selecciona un tipo de empresa';
+              }
+              return null;
+            },
+            iconSize: 0,
+            isDense: false,
+            hint: Text(
+              'Tipo de empresa',
+              style: GoogleFonts.nunito(
+                color: blue,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            items: [
+              DropdownMenuItem(
+                value: CompanyType.consultory,
+                child: Text(
+                  companyEnumToString(CompanyType.consultory),
+                  style: textTheme.displaySmall,
+                ),
+              ),
+              DropdownMenuItem(
+                value: CompanyType.dev,
+                child: Text(
+                  companyEnumToString(CompanyType.dev),
+                  style: textTheme.displaySmall,
+                ),
+              ),
+              DropdownMenuItem(
+                value: CompanyType.factory,
+                child: Text(
+                  companyEnumToString(CompanyType.factory),
+                  style: textTheme.displaySmall,
+                ),
+              ),
+            ],
+            onChanged: (value) {
+              changeFormValue(value!);
+            },
+          ),
+        ),
+      ],
     );
   }
 }

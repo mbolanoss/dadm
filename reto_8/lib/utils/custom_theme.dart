@@ -65,29 +65,29 @@ ThemeData lightTheme = ThemeData(
   ),
 
   // Text inputs
-  inputDecorationTheme: const InputDecorationTheme(
-    hintStyle: TextStyle(
+  inputDecorationTheme: InputDecorationTheme(
+    hintStyle: GoogleFonts.nunito(
       color: blue,
       fontSize: 22,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.bold,
     ),
-    errorStyle: TextStyle(
+    errorStyle: GoogleFonts.nunito(
       color: red,
       fontSize: 16,
     ),
-    enabledBorder: UnderlineInputBorder(
+    enabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(
         width: 3,
         color: blue,
       ),
     ),
-    focusedBorder: UnderlineInputBorder(
+    focusedBorder: const UnderlineInputBorder(
       borderSide: BorderSide(
         width: 3,
         color: yellow,
       ),
     ),
-    errorBorder: UnderlineInputBorder(
+    errorBorder: const UnderlineInputBorder(
       borderSide: BorderSide(
         width: 3,
         color: red,
