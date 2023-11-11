@@ -31,6 +31,7 @@ class HomeScreen extends StatelessWidget {
           child: const Icon(
             Icons.location_on_sharp,
             color: Colors.red,
+            size: 40,
           ),
         ),
       );
@@ -52,7 +53,7 @@ class HomeScreen extends StatelessWidget {
       body: FlutterMap(
         mapController: mapController,
         options: MapOptions(
-          initialZoom: 9.2,
+          initialZoom: 15,
           initialCenter: LatLng(userCoords.latitude, userCoords.longitude),
         ),
         children: [
@@ -61,7 +62,10 @@ class HomeScreen extends StatelessWidget {
                 'https://api.mapbox.com/styles/v1/mbolanoss/clohfm14g001401pee8zi3xaq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWJvbGFub3NzIiwiYSI6ImNsb2c3bXFuMzBxbDYyam8zbGk4cmE1dGQifQ.hI6q-CDuhpk54sNiVjc2Iw',
             userAgentPackageName: 'com.example.app',
           ),
-          MarkerLayer(markers: markers),
+          MarkerLayer(
+            markers: markers,
+            rotate: true,
+          ),
         ],
       ),
     );

@@ -29,7 +29,7 @@ class MarkerSheet extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               PlaceItem(
                 info: customMarker.address,
                 icon: Icons.signpost,
@@ -37,7 +37,7 @@ class MarkerSheet extends StatelessWidget {
               const ItemDivider(),
               PlaceItem(
                 info: customMarker.ownerName,
-                icon: Icons.signpost,
+                icon: Icons.person,
               ),
               const ItemDivider(),
               PlaceItem(
