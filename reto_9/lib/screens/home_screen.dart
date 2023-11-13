@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import "package:latlong2/latlong.dart";
 import 'package:provider/provider.dart';
+import 'package:reto_9/providers/radius_provider.dart';
 import 'package:reto_9/services/markers_service.dart';
 import 'package:reto_9/utils/custom_theme.dart';
 import 'package:reto_9/widgets/marker_sheet.dart';
@@ -13,31 +14,48 @@ class HomeScreen extends StatelessWidget {
   final MapController mapController = MapController();
   HomeScreen({super.key});
 
-  List<Marker> buildMarkers(
-      List<CustomMarker> customMarkers, BuildContext context) {
+  List<Marker> loadMarkers(
+    List<CustomMarker> customMarkers,
+    int currentRadius,
+    LatLng userPosition,
+    BuildContext context,
+  ) {
     final markerList = <Marker>[];
 
     for (final customMarker in customMarkers) {
-      final newMarker = Marker(
-        point: LatLng(customMarker.latitude, customMarker.longitude),
-        child: GestureDetector(
-          onTap: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (_) {
-                return MarkerSheet(customMarker: customMarker);
-              },
-            );
-          },
-          child: const Icon(
-            Icons.location_on_sharp,
-            color: Colors.red,
-            size: 40,
-          ),
-        ),
+      const distance = Distance();
+
+      final radiusDiff = distance.as(
+        LengthUnit.Meter,
+        userPosition,
+        LatLng(customMarker.latitude, customMarker.longitude),
       );
 
-      markerList.add(newMarker);
+      // print('DIFF = $radiusDiff');
+      // print('CURRENT = $currentRadius');
+
+      if (radiusDiff < currentRadius.toDouble()) {
+        final newMarker = Marker(
+          point: LatLng(customMarker.latitude, customMarker.longitude),
+          child: GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (_) {
+                  return MarkerSheet(customMarker: customMarker);
+                },
+              );
+            },
+            child: const Icon(
+              Icons.location_on_sharp,
+              color: Colors.red,
+              size: 40,
+            ),
+          ),
+        );
+
+        markerList.add(newMarker);
+      }
     }
 
     return markerList;
@@ -47,8 +65,16 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final userCoords = context.read<Position>();
     final markersService = context.read<MarkersService>();
+    final radiusProvider = context.watch<RadiusProvider>();
 
-    final markers = buildMarkers(markersService.customMarkers, context);
+    final markers = loadMarkers(
+      markersService.customMarkers,
+      radiusProvider.radius,
+      LatLng(userCoords.latitude, userCoords.longitude),
+      context,
+    );
+
+    // print(radiusProvider.radius);
 
     return SafeArea(
       child: Scaffold(
@@ -73,11 +99,60 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            PositionForm(
-              mapController: mapController,
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PositionForm(
+                  mapController: mapController,
+                ),
+                const RadiusSlider(),
+              ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class RadiusSlider extends StatelessWidget {
+  const RadiusSlider({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final radiusProvider = context.watch<RadiusProvider>();
+
+    return Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: purple,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Radio (m): ${radiusProvider.radius}',
+            style: textTheme.displaySmall!.copyWith(
+              color: Colors.white,
+            ),
+          ),
+          Slider(
+            min: 300,
+            max: 3000,
+            value: radiusProvider.radius.toDouble(),
+            onChanged: (value) {
+              radiusProvider.changeRadius(value.toInt());
+            },
+            thumbColor: yellow,
+            activeColor: blue,
+            divisions: 10,
+          ),
+        ],
       ),
     );
   }

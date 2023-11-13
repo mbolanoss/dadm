@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:reto_9/providers/radius_provider.dart';
 import 'package:reto_9/services/geolocator_service.dart';
 import 'package:reto_9/services/markers_service.dart';
 import 'package:reto_9/utils/custom_theme.dart';
@@ -24,6 +25,9 @@ void main() async {
         ),
         Provider<MarkersService>(
           create: (_) => markersService,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RadiusProvider(radius: 300),
         ),
       ],
       child: const MyApp(),
