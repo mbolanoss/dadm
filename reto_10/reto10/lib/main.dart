@@ -7,7 +7,7 @@ import 'package:reto10/utils/custom_theme.dart';
 void main() async {
   final apiService = ApiService();
 
-  final response = await apiService.test();
+  final response = await apiService.getAllData();
   print(response.length);
 
   runApp(

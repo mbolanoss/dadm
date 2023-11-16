@@ -1,56 +1,46 @@
-// To parse this JSON data, do
-//
-//     final welcome = welcomeFromJson(jsonString);
+// ignore_for_file: constant_identifier_names
 
-import 'dart:convert';
-
-List<Welcome> welcomeFromJson(String str) =>
-    List<Welcome>.from(json.decode(str).map((x) => Welcome.fromJson(x)));
-
-String welcomeToJson(List<Welcome> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-class Welcome {
-  String aO;
-  String trimestre;
-  Proveedor proveedor;
-  Segmento segmento;
+class DBEntry {
+  String year;
+  String trimester;
+  Supplier provider;
+  Segment segment;
   Terminal terminal;
-  TecnologA tecnologA;
-  String noSuscriptores;
+  Technology technology;
+  String noSuscriptors;
 
-  Welcome({
-    required this.aO,
-    required this.trimestre,
-    required this.proveedor,
-    required this.segmento,
+  DBEntry({
+    required this.year,
+    required this.trimester,
+    required this.provider,
+    required this.segment,
     required this.terminal,
-    required this.tecnologA,
-    required this.noSuscriptores,
+    required this.technology,
+    required this.noSuscriptors,
   });
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-        aO: json["a_o"],
-        trimestre: json["trimestre"],
-        proveedor: proveedorValues.map[json["proveedor"]]!,
-        segmento: segmentoValues.map[json["segmento"]]!,
+  factory DBEntry.fromJson(Map<String, dynamic> json) => DBEntry(
+        year: json["a_o"],
+        trimester: json["trimestre"],
+        provider: supplierValues.map[json["proveedor"]]!,
+        segment: segmentValues.map[json["segmento"]]!,
         terminal: terminalValues.map[json["terminal"]]!,
-        tecnologA: tecnologAValues.map[json["tecnolog_a"]]!,
-        noSuscriptores: json["no_suscriptores"],
+        technology: technologyValues.map[json["tecnolog_a"]]!,
+        noSuscriptors: json["no_suscriptores"],
       );
 
   Map<String, dynamic> toJson() => {
-        "a_o": aO,
-        "trimestre": trimestre,
-        "proveedor": proveedorValues.reverse[proveedor],
-        "segmento": segmentoValues.reverse[segmento],
+        "a_o": year,
+        "trimestre": trimester,
+        "proveedor": supplierValues.reverse[provider],
+        "segmento": segmentValues.reverse[segment],
         "terminal": terminalValues.reverse[terminal],
-        "tecnolog_a": tecnologAValues.reverse[tecnologA],
-        "no_suscriptores": noSuscriptores,
+        "tecnolog_a": technologyValues.reverse[technology],
+        "no_suscriptores": noSuscriptors,
       };
 }
 
-enum Proveedor {
+enum Supplier {
   AVANTEL_S_A_S,
   COLOMBIA_MOVIL_S_A_ESP,
   COLOMBIA_TELECOMUNICACIONES_S_A_E_S_P,
@@ -62,33 +52,33 @@ enum Proveedor {
   VIRGIN_MOBILE_COLOMBIA_S_A_S
 }
 
-final proveedorValues = EnumValues({
-  "AVANTEL S.A.S": Proveedor.AVANTEL_S_A_S,
-  "COLOMBIA MOVIL  S.A ESP": Proveedor.COLOMBIA_MOVIL_S_A_ESP,
+final supplierValues = EnumValues({
+  "AVANTEL S.A.S": Supplier.AVANTEL_S_A_S,
+  "COLOMBIA MOVIL  S.A ESP": Supplier.COLOMBIA_MOVIL_S_A_ESP,
   "COLOMBIA TELECOMUNICACIONES S.A. E.S.P.":
-      Proveedor.COLOMBIA_TELECOMUNICACIONES_S_A_E_S_P,
+      Supplier.COLOMBIA_TELECOMUNICACIONES_S_A_E_S_P,
   "COMUNICACION CELULAR S A COMCEL S A":
-      Proveedor.COMUNICACION_CELULAR_S_A_COMCEL_S_A,
+      Supplier.COMUNICACION_CELULAR_S_A_COMCEL_S_A,
   "EMPRESA DE TELECOMUNICACIONES DE BOGOTA S.A. ESP":
-      Proveedor.EMPRESA_DE_TELECOMUNICACIONES_DE_BOGOTA_S_A_ESP,
-  "INTELNEXT SAS": Proveedor.INTELNEXT_SAS,
-  "PARTNERS TELECOM COLOMBIA SAS": Proveedor.PARTNERS_TELECOM_COLOMBIA_SAS,
-  "SETROC MOBILE GROUP SAS": Proveedor.SETROC_MOBILE_GROUP_SAS,
-  "VIRGIN MOBILE COLOMBIA S.A.S.": Proveedor.VIRGIN_MOBILE_COLOMBIA_S_A_S
+      Supplier.EMPRESA_DE_TELECOMUNICACIONES_DE_BOGOTA_S_A_ESP,
+  "INTELNEXT SAS": Supplier.INTELNEXT_SAS,
+  "PARTNERS TELECOM COLOMBIA SAS": Supplier.PARTNERS_TELECOM_COLOMBIA_SAS,
+  "SETROC MOBILE GROUP SAS": Supplier.SETROC_MOBILE_GROUP_SAS,
+  "VIRGIN MOBILE COLOMBIA S.A.S.": Supplier.VIRGIN_MOBILE_COLOMBIA_S_A_S
 });
 
-enum Segmento { EMPRESAS, PERSONAS }
+enum Segment { EMPRESAS, PERSONAS }
 
-final segmentoValues =
-    EnumValues({"Empresas": Segmento.EMPRESAS, "Personas": Segmento.PERSONAS});
+final segmentValues =
+    EnumValues({"Empresas": Segment.EMPRESAS, "Personas": Segment.PERSONAS});
 
-enum TecnologA { CMTS_PARA_REDES_CON_TECNOLOG, THE_2_G, THE_3_G, THE_4_G }
+enum Technology { CMTS_PARA_REDES_CON_TECNOLOG, THE_2_G, THE_3_G, THE_4_G }
 
-final tecnologAValues = EnumValues({
-  "CMTS (para redes con tecnolog�": TecnologA.CMTS_PARA_REDES_CON_TECNOLOG,
-  "2G": TecnologA.THE_2_G,
-  "3G": TecnologA.THE_3_G,
-  "4G": TecnologA.THE_4_G
+final technologyValues = EnumValues({
+  "CMTS (para redes con tecnolog�": Technology.CMTS_PARA_REDES_CON_TECNOLOG,
+  "2G": Technology.THE_2_G,
+  "3G": Technology.THE_3_G,
+  "4G": Technology.THE_4_G
 });
 
 enum Terminal { DATA_CARD, TEL_FONO_M_VIL }

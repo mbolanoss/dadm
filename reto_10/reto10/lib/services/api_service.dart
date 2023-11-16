@@ -9,16 +9,16 @@ const String domain = "datos.gov.co";
 const String path = "resource/4vk3-rzfy.json";
 
 class ApiService {
-  Future<List<Welcome>> test() async {
+  Future<List<DBEntry>> getAllData() async {
     final url = Uri.https(domain, path);
     final response = await http.get(url);
 
     final List<dynamic> rawData = jsonDecode(response.body);
 
-    final list = <Welcome>[];
+    final list = <DBEntry>[];
 
     for (Map<String, dynamic> item in rawData) {
-      final newEntry = Welcome.fromJson(item);
+      final newEntry = DBEntry.fromJson(item);
       list.add(newEntry);
     }
 
