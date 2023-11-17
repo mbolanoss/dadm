@@ -18,11 +18,15 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 30),
+          margin: const EdgeInsets.symmetric(
+            horizontal: 30,
+            vertical: 30,
+          ),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Grafico
                 Column(
                   children: [
                     Text(
@@ -30,18 +34,26 @@ class HomeScreen extends StatelessWidget {
                       style: textTheme.displayLarge,
                       textAlign: TextAlign.center,
                     ),
+                    Container(
+                      color: red,
+                      height: 300,
+                    ),
                     const ColumnDivider(),
                   ],
                 ),
-                const Column(
-                  children: [
-                    // Filtrar por tecnologia
-                    TechnologyFilterSection(),
-                    ColumnDivider(),
-                    // Filtrar por segmento
-                    SegmentFilterSection(),
-                    ColumnDivider(),
-                  ],
+                // Filtros
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: const [
+                      // Filtrar por tecnologia
+                      TechnologyFilterSection(),
+                      ColumnDivider(),
+                      // Filtrar por segmento
+                      SegmentFilterSection(),
+                      ColumnDivider(),
+                    ],
+                  ),
                 ),
               ],
             ),
