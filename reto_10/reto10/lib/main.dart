@@ -7,14 +7,13 @@ import 'package:reto10/utils/custom_theme.dart';
 void main() async {
   final apiService = ApiService();
 
-  final response = await apiService.getAllData();
-  print(response.length);
+  await apiService.fetchAllData();
 
   runApp(
     MultiProvider(
       providers: [
-        Provider(
-          create: (_) => ApiService(),
+        ChangeNotifierProvider(
+          create: (_) => apiService,
         ),
       ],
       child: const MyApp(),
