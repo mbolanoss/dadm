@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reto10/models/db_entry.dart';
 import 'package:reto10/services/api_service.dart';
 import 'package:reto10/utils/custom_theme.dart';
+
+import '../widgets/tech_filter_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -30,14 +33,14 @@ class HomeScreen extends StatelessWidget {
                     const ColumnDivider(),
                   ],
                 ),
-                const Column(
+                Column(
                   children: [
                     // Filtrar por tecnologia
                     TechnologyFilterSection(),
-                    ColumnDivider(),
+                    const ColumnDivider(),
                     // Filtrar por segmento
-                    SegmentFilterSection(),
-                    ColumnDivider(),
+                    const SegmentFilterSection(),
+                    const ColumnDivider(),
                   ],
                 ),
               ],
@@ -67,43 +70,13 @@ class SegmentFilterSection extends StatelessWidget {
           style: textTheme.displaySmall,
         ),
         ElevatedButton(
-          onPressed: () => apiService.changeFilter(
-            FilterType.technology,
-          ),
-          style: buttonTheme.style,
-          child: Text(
-            'Filtrar',
-            style: textTheme.labelLarge!.copyWith(
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+          onPressed: () async {
+            // apiService.changeFilter(
+            //   FilterType.technology,
+            // );
 
-class TechnologyFilterSection extends StatelessWidget {
-  const TechnologyFilterSection({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final apiService = context.watch<ApiService>();
-    final buttonTheme = Theme.of(context).elevatedButtonTheme;
-
-    return Column(
-      children: [
-        Text(
-          'Filtrar por tecnología',
-          style: textTheme.displaySmall,
-        ),
-        ElevatedButton(
-          onPressed: () => apiService.changeFilter(
-            FilterType.technology,
-          ),
+            // await apiService.fetchByTechnology(Technology.THE_3_G);
+          },
           style: buttonTheme.style,
           child: Text(
             'Filtrar',

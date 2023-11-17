@@ -22,15 +22,6 @@ class ApiService with ChangeNotifier {
 
   void changeFilter(FilterType newFilter) {
     filter = newFilter;
-
-    notifyListeners();
-  }
-
-  Future<void> fetchData() async {
-    data.clear();
-
-    await fetchAllData();
-
     notifyListeners();
   }
 
@@ -44,5 +35,23 @@ class ApiService with ChangeNotifier {
       final newEntry = DBEntry.fromJson(item);
       data.add(newEntry);
     }
+  }
+
+  Future<void> fetchByTechnology(Technology tech) async {
+    data.clear();
+
+    final url = Uri.https(domain, path, {
+      'tecnolog_a': technologyValues.reverse[tech],
+    });
+    final response = await http.get(url);
+
+    final List<dynamic> rawData = jsonDecode(response.body);
+
+    for (Map<String, dynamic> item in rawData) {
+      final newEntry = DBEntry.fromJson(item);
+      data.add(newEntry);
+    }
+
+    notifyListeners();
   }
 }
