@@ -54,4 +54,22 @@ class ApiService with ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> fetchBySegment(Segment segment) async {
+    data.clear();
+
+    final url = Uri.https(domain, path, {
+      'segmento': segmentValues.reverse[segment],
+    });
+    final response = await http.get(url);
+
+    final List<dynamic> rawData = jsonDecode(response.body);
+
+    for (Map<String, dynamic> item in rawData) {
+      final newEntry = DBEntry.fromJson(item);
+      data.add(newEntry);
+    }
+
+    notifyListeners();
+  }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reto10/models/db_entry.dart';
 import 'package:reto10/services/api_service.dart';
 import 'package:reto10/utils/custom_theme.dart';
 
+import '../widgets/segment_filter_section.dart';
 import '../widgets/tech_filter_section.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -33,14 +33,14 @@ class HomeScreen extends StatelessWidget {
                     const ColumnDivider(),
                   ],
                 ),
-                Column(
+                const Column(
                   children: [
                     // Filtrar por tecnologia
                     TechnologyFilterSection(),
-                    const ColumnDivider(),
+                    ColumnDivider(),
                     // Filtrar por segmento
-                    const SegmentFilterSection(),
-                    const ColumnDivider(),
+                    SegmentFilterSection(),
+                    ColumnDivider(),
                   ],
                 ),
               ],
@@ -48,44 +48,6 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class SegmentFilterSection extends StatelessWidget {
-  const SegmentFilterSection({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final apiService = context.watch<ApiService>();
-    final buttonTheme = Theme.of(context).elevatedButtonTheme;
-
-    return Column(
-      children: [
-        Text(
-          'Filtrar por segmento',
-          style: textTheme.displaySmall,
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            // apiService.changeFilter(
-            //   FilterType.technology,
-            // );
-
-            // await apiService.fetchByTechnology(Technology.THE_3_G);
-          },
-          style: buttonTheme.style,
-          child: Text(
-            'Filtrar',
-            style: textTheme.labelLarge!.copyWith(
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
