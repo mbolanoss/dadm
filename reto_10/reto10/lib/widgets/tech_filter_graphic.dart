@@ -24,7 +24,7 @@ class TechFilterGraphic extends StatelessWidget {
         barGroups: getBarGroups(apiService.amounts),
         gridData: const FlGridData(show: false),
         alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
+        // maxY: 20,
       ),
     );
   }
@@ -129,7 +129,7 @@ class TechFilterGraphic extends StatelessWidget {
 
   List<BarChartGroupData> getBarGroups(Map<Supplier, int> amounts) {
     return List<BarChartGroupData>.generate(
-      9,
+      7,
       (index) => BarChartGroupData(
         x: index,
         barRods: [

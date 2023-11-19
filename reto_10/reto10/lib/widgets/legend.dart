@@ -49,19 +49,11 @@ class Legend extends StatelessWidget {
           style: textTheme.labelSmall,
         ),
         Text(
-          'F = $intelnextStr',
+          'F = $partnersStr',
           style: textTheme.labelSmall,
         ),
         Text(
-          'G = $partnersStr',
-          style: textTheme.labelSmall,
-        ),
-        Text(
-          'H = $setrocStr',
-          style: textTheme.labelSmall,
-        ),
-        Text(
-          'I = $virginStr',
+          'G = $virginStr',
           style: textTheme.labelSmall,
         ),
       ],
