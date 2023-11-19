@@ -7,8 +7,8 @@ import 'package:reto10/utils/custom_theme.dart';
 
 import '../models/db_entry.dart';
 
-class TechFilterGraphic extends StatelessWidget {
-  const TechFilterGraphic({super.key});
+class Graphic extends StatelessWidget {
+  const Graphic({super.key});
 
   @override
   Widget build(BuildContext context) {

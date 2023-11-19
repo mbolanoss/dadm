@@ -19,18 +19,18 @@ class Legend extends StatelessWidget {
         supplierValues.reverse[Supplier.COMUNICACION_CELULAR_S_A_COMCEL_S_A];
     final empresaTelecomStr = supplierValues
         .reverse[Supplier.EMPRESA_DE_TELECOMUNICACIONES_DE_BOGOTA_S_A_ESP];
-    final intelnextStr = supplierValues.reverse[Supplier.INTELNEXT_SAS];
     final partnersStr =
         supplierValues.reverse[Supplier.PARTNERS_TELECOM_COLOMBIA_SAS];
-    final setrocStr = supplierValues.reverse[Supplier.SETROC_MOBILE_GROUP_SAS];
     final virginStr =
         supplierValues.reverse[Supplier.VIRGIN_MOBILE_COLOMBIA_S_A_S];
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           'A = $avantelStr',
           style: textTheme.labelSmall,
+          textAlign: TextAlign.start,
         ),
         Text(
           'B = $colombiaMovilStr',
