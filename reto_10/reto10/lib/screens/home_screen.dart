@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reto10/services/api_service.dart';
 import 'package:reto10/utils/custom_theme.dart';
+import 'package:reto10/widgets/legend.dart';
+import 'package:reto10/widgets/tech_filter_graphic.dart';
 
 import '../widgets/segment_filter_section.dart';
 import '../widgets/tech_filter_section.dart';
@@ -25,19 +27,19 @@ class HomeScreen extends StatelessWidget {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 // Grafico
                 Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Datos: ${apiService.data.length} filas',
                       style: textTheme.displayLarge,
                       textAlign: TextAlign.center,
                     ),
-                    Container(
-                      color: red,
-                      height: 300,
-                    ),
+                    GraphicWrapper(),
+                    Legend(),
                     const ColumnDivider(),
                   ],
                 ),
@@ -61,6 +63,41 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class GraphicWrapper extends StatelessWidget {
+  const GraphicWrapper({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final apiService = context.watch<ApiService>();
+    switch (apiService.filter) {
+      case FilterType.technology:
+        return const AspectRatio(
+          aspectRatio: 1.6,
+          child: TechFilterGraphic(),
+        );
+      case FilterType.segment:
+        return Container(
+          color: red,
+          height: 300,
+        );
+      case FilterType.supplier:
+        return Container(
+          color: Colors.green,
+          height: 300,
+        );
+
+      case FilterType.none:
+        return const Icon(
+          Icons.dashboard,
+          size: 150,
+          color: purple,
+        );
+    }
   }
 }
 

@@ -57,6 +57,11 @@ ThemeData lightTheme = ThemeData(
       color: Colors.white,
       fontSize: 26,
     ),
+    labelSmall: GoogleFonts.nunito(
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+      fontSize: 16,
+    ),
     // Text inputs
     bodyLarge: GoogleFonts.nunito(
       fontWeight: FontWeight.bold,

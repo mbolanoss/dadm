@@ -18,11 +18,20 @@ enum FilterType {
 
 class ApiService with ChangeNotifier {
   List<DBEntry> data = [];
-  FilterType filter = FilterType.none;
+  Map<Supplier, int> amounts = {};
+
+  FilterType filter = FilterType.technology;
 
   void changeFilter(FilterType newFilter) {
     filter = newFilter;
     notifyListeners();
+  }
+
+  void countAmounts() {
+    for (final supplierValue in Supplier.values) {
+      amounts[supplierValue] =
+          data.where((e) => e.provider == supplierValue).length;
+    }
   }
 
   Future<void> fetchAllData() async {
@@ -35,6 +44,8 @@ class ApiService with ChangeNotifier {
       final newEntry = DBEntry.fromJson(item);
       data.add(newEntry);
     }
+
+    countAmounts();
   }
 
   Future<void> fetchByTechnology(Technology tech) async {
@@ -51,6 +62,8 @@ class ApiService with ChangeNotifier {
       final newEntry = DBEntry.fromJson(item);
       data.add(newEntry);
     }
+
+    countAmounts();
 
     notifyListeners();
   }
@@ -69,6 +82,8 @@ class ApiService with ChangeNotifier {
       final newEntry = DBEntry.fromJson(item);
       data.add(newEntry);
     }
+
+    countAmounts();
 
     notifyListeners();
   }

@@ -52,6 +52,16 @@ enum Supplier {
   VIRGIN_MOBILE_COLOMBIA_S_A_S
 }
 
+final List<Supplier> validSuppliers = [
+  Supplier.AVANTEL_S_A_S,
+  Supplier.COLOMBIA_MOVIL_S_A_ESP,
+  Supplier.COLOMBIA_TELECOMUNICACIONES_S_A_E_S_P,
+  Supplier.COMUNICACION_CELULAR_S_A_COMCEL_S_A,
+  Supplier.EMPRESA_DE_TELECOMUNICACIONES_DE_BOGOTA_S_A_ESP,
+  Supplier.PARTNERS_TELECOM_COLOMBIA_SAS,
+  Supplier.VIRGIN_MOBILE_COLOMBIA_S_A_S
+];
+
 final supplierValues = EnumValues({
   "AVANTEL S.A.S": Supplier.AVANTEL_S_A_S,
   "COLOMBIA MOVIL  S.A ESP": Supplier.COLOMBIA_MOVIL_S_A_ESP,
